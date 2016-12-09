@@ -1,0 +1,5 @@
+#+TITLE: JsPatronum
+* 简介
+目标完成一个 JavaScript 代码混淆器。命名来自《哈利波特》防御魔法： =Expecto Patronum= 。
+* 进度
+第一步，实现 JavaScript 压缩功能，通过学习 YUI Compresser 完成。
