@@ -1,79 +1,81 @@
-function NQueens(order) {
-  if (fQ < 4) {
-    $X.w('N Queens problem apply for order bigger than 3 ! ');
-    return;
-  }
-  var hm = [];
-  var c2 = false;
-  rowLoop:
-    for (var BP = 0; BP < fQ; BP++) {
-      if (BP < 0) {
-        $X.w('This N Queens problem has no solution ! ');
-        break;
-      }
-      if (hm[BP] === R) {
-        hm[BP] = [];
-      }
-      for (var E = 0; E < fQ; E++) {
-        if (hm[BP][E] === 0) {
-          continue;
-        } else if (c2 && hm[BP][E] == 1) {
-          if (E === fQ - 1) {
-            UL(hm, fQ, BP);
-            BP = BP - 2;
-            continue ec;
+(function(_0, u, e8, e, J) {
+  function NQueens(order) {
+    if ($ < 4) {
+      Yg._b('N Queens problem apply for order bigger than 3 ! ');
+      return;
+    }
+    var Q = [];
+    var g9 = false;
+    rowLoop:
+      for (var A = 0; A < $; A++) {
+        if (A < 0) {
+          Yg._b('This N Queens problem has no solution ! ');
+          break;
+        }
+        if (Q[A] === r) {
+          Q[A] = [];
+        }
+        for (var a = 0; a < $; a++) {
+          if (Q[A][a] === 0) {
+            continue;
+          } else if (g9 && Q[A][a] == 1) {
+            if (a === $ - 1) {
+              g(Q, $, A);
+              A = A - 2;
+              continue I;
+            }
+            Q[A][a] = 0;
+            g9 = false;
+            continue;
           }
-          hm[BP][E] = 0;
-          c2 = false;
-          continue;
+          Q[A][a] = 1;
+          if (f(Q, A, a)) {
+            continue I;
+          } else if (a == $ - 1) {
+            g9 = true;
+            g(Q, $, A);
+            A = A - 2;
+            continue I;
+          } else {
+            Q[A][a] = 0;
+            continue;
+          }
+          ;
         }
-        hm[BP][E] = 1;
-        if (s(hm, BP, E)) {
-          continue ec;
-        } else if (E == fQ - 1) {
-          c2 = true;
-          UL(hm, fQ, BP);
-          BP = BP - 2;
-          continue ec;
-        } else {
-          hm[BP][E] = 0;
-          continue;
-        }
-        ;
+      }
+    return Q;
+  }
+  function g(nQueens, Fe, l) {
+    for (var pM = 0; pM < Fe; pM++) {
+      US[l][pM] = r;
+    }
+  }
+  function f(nQueens, ho, D) {
+    for (var rg = 0; rg < D; rg++) {
+      if (jM[ho][rg] == 1) {
+        return false;
       }
     }
-  return hm;
-}
-function UL(nQueens, $, s1) {
-  for (var Nl = 0; Nl < $; Nl++) {
-    WQ[s1][Nl] = R;
-  }
-}
-function s(nQueens, I, fs) {
-  for (var H = 0; H < fs; H++) {
-    if (y[I][H] == 1) {
-      return false;
-    }
-  }
-  for (var k = 1; k < I + 1; k++) {
-    if (y[I - k][fs] == 1 || (y[I - k][fs - k] == 1) || (y[I - k][fs + k] == 1)) {
-      return false;
-    }
-  }
-  return true;
-}
-function w7(queens) {
-  for (var Gr = 0; Gr < e.J; Gr++) {
-    var IK = '';
-    for (var y = 0; y < e.J; y++) {
-      if (e[Gr][y] === R) {
-        e[Gr][y] = 0;
+    for (var hh = 1; hh < ho + 1; hh++) {
+      if (jM[ho - hh][D] == 1 || (jM[ho - hh][D - hh] == 1) || (jM[ho - hh][D + hh] == 1)) {
+        return false;
       }
-      IK = IK + e[Gr][y] + '  ';
     }
-    $X.w(IK);
+    return true;
   }
-}
-null;
-var queens = BO(8);
-R(O);
+  function Pv(queens) {
+    for (var B = 0; B < L.s; B++) {
+      var JU = '';
+      for (var E = 0; E < L.s; E++) {
+        if (L[B][E] === r) {
+          L[B][E] = 0;
+        }
+        JU = JU + L[B][E] + '  ';
+      }
+      Yg._b(JU);
+    }
+  }
+  null;
+  var I = Y(8);
+  l(I);
+})("NQueens", "resetRow", "isQueenValid", "printQ", "queens");
