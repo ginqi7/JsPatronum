@@ -21,21 +21,19 @@ public class VisitorRename implements NodeVisitor {
             Name name = (Name)astNode;
             Scope scope = name.getDefiningScope();
             int nums = this.visitorGetName.getNumbers();
-            if (scopeMap.containsKey(scope)) {
-                 String nameStr = name.getIdentifier();
-                 Map<String, String> nameMap = scopeMap.get(scope);
-                 if (!nameMap.containsKey(nameStr)) {
-                     String newName = Tool.getRandomName(Tool.lengthOfVar(nums));
-                     while (nameMap.containsValue(newName)) {
-                         newName = Tool.getRandomName(nums);
-                     }
-                     nameMap.put(nameStr, newName);
-                 }
-
-                 name.setIdentifier(nameMap.get(nameStr));
-            } else {
+            if (!scopeMap.containsKey(scope)) {
                 this.scopeMap.put(scope, new HashMap<String, String>());
             }
+            String nameStr = name.getIdentifier();
+            Map<String, String> nameMap = scopeMap.get(scope);
+            if (!nameMap.containsKey(nameStr)) {
+                String newName = Tool.getRandomName(Tool.lengthOfVar(nums));
+                while (nameMap.containsValue(newName)) {
+                    newName = Tool.getRandomName(nums);
+                }
+                nameMap.put(nameStr, newName);
+            }
+            name.setIdentifier(nameMap.get(nameStr));
         }
         return true;
     }

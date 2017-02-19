@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import java.util.*;
-
 public class Obfuscator {
     private AstRoot astRoot;
     public Obfuscator(Reader in) throws IOException {
