@@ -1,80 +1,79 @@
-(function(_0, _1, _2, _3, _4) {
-    function this.["_0"]_0(order) {
-        if (order < 4) {
-            console.log('N Queens problem apply for order bigger than 3 ! ');
-            return;
+function NQueens(order) {
+  if (fQ < 4) {
+    $X.w('N Queens problem apply for order bigger than 3 ! ');
+    return;
+  }
+  var hm = [];
+  var c2 = false;
+  rowLoop:
+    for (var BP = 0; BP < fQ; BP++) {
+      if (BP < 0) {
+        $X.w('This N Queens problem has no solution ! ');
+        break;
+      }
+      if (hm[BP] === R) {
+        hm[BP] = [];
+      }
+      for (var E = 0; E < fQ; E++) {
+        if (hm[BP][E] === 0) {
+          continue;
+        } else if (c2 && hm[BP][E] == 1) {
+          if (E === fQ - 1) {
+            UL(hm, fQ, BP);
+            BP = BP - 2;
+            continue ec;
+          }
+          hm[BP][E] = 0;
+          c2 = false;
+          continue;
         }
-        var this["fds"]tens = [];
-        var backTracking = false;
-        rowLoop:
-        for (var row = 0; row < order; row++) {
-            if (row < 0) {
-                console.log('This N Queens problem has no solution ! ');
-                break;
-            }
-            if (nQueens[row] === undefined) {
-                nQueens[row] = [];
-            }
-            for (var col = 0; col < order; col++) {
-                if (nQueens[row][col] === 0) {
-                    continue;
-                } else if (backTracking && nQueens[row][col] == 1) {
-                    if (col === order - 1) {
-                        _1(nQueens, order, row);
-                        row = row - 2;
-                        continue rowLoop;
-                    }
-                    nQueens[row][col] = 0;
-                    backTracking = false;
-                    continue;
-                }
-                nQueens[row][col] = 1;
-                if (_2(nQueens, row, col)) {
-                    continue rowLoop;
-                } else if (col == order - 1) {
-                    backTracking = true;
-                    _1(nQueens, order, row);
-                    row = row - 2;
-                    continue rowLoop;
-                } else {
-                    nQueens[row][col] = 0;
-                    continue;
-                }
-                ;
-            }
+        hm[BP][E] = 1;
+        if (s(hm, BP, E)) {
+          continue ec;
+        } else if (E == fQ - 1) {
+          c2 = true;
+          UL(hm, fQ, BP);
+          BP = BP - 2;
+          continue ec;
+        } else {
+          hm[BP][E] = 0;
+          continue;
         }
-        return nQueens;
+        ;
+      }
     }
-    function _1(nQueens, order, row) {
-        for (var col = 0; col < order; col++) {
-            nQueens[row][col] = undefined;
-        }
+  return hm;
+}
+function UL(nQueens, $, s1) {
+  for (var Nl = 0; Nl < $; Nl++) {
+    WQ[s1][Nl] = R;
+  }
+}
+function s(nQueens, I, fs) {
+  for (var H = 0; H < fs; H++) {
+    if (y[I][H] == 1) {
+      return false;
     }
-    function _2(nQueens, row, col) {
-        for (var i = 0; i < col; i++) {
-            if (nQueens[row][i] == 1) {
-                return false;
-            }
-        }
-        for (var j = 1; j < row + 1; j++) {
-            if (nQueens[row - j][col] == 1 || (nQueens[row - j][col - j] == 1) || (nQueens[row - j][col + j] == 1)) {
-                return false;
-            }
-        }
-        return true;
+  }
+  for (var k = 1; k < I + 1; k++) {
+    if (y[I - k][fs] == 1 || (y[I - k][fs - k] == 1) || (y[I - k][fs + k] == 1)) {
+      return false;
     }
-    function _3(_4) {
-        for (var row = 0; row < _4.length; row++) {
-            var rowText = '';
-            for (var col = 0; col < _4.length; col++) {
-                if (_4[row][col] === undefined) {
-                    _4[row][col] = 0;
-                }
-                rowText = rowText + _4[row][col] + '  ';
-            }
-            console.log(rowText);
-        }
+  }
+  return true;
+}
+function w7(queens) {
+  for (var Gr = 0; Gr < e.J; Gr++) {
+    var IK = '';
+    for (var y = 0; y < e.J; y++) {
+      if (e[Gr][y] === R) {
+        e[Gr][y] = 0;
+      }
+      IK = IK + e[Gr][y] + '  ';
     }
-    _4 = _0(8);
-  _3(_4);
-})("NQueens", "resetRow", "isQueenValid", "printQ", "queens");
+    $X.w(IK);
+  }
+}
+null;
+var queens = BO(8);
+R(O);

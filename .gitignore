@@ -2,3 +2,5 @@ build
 out
 *~
 .gradle
+workbench.xmi
+.classpath

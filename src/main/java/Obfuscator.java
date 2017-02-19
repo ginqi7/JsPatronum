@@ -88,10 +88,7 @@ public class Obfuscator {
                         if (astNode.getClass() == FunctionNode.class) {
                             this.scopes.add((Scope) astNode);
                         }
-                        if (astNode.getClass() == Name.class &&
-                            // ((Name)astNode).getDefiningScope() == scopes.get(0) &&
-                            symbolMap.get(((Name)astNode).getIdentifier()) != null
-                            ) {
+                        if (astNode.getClass() == Name.class) {
                             Name name = (Name)astNode;
                             name.setIdentifier(paramMapF.get(name.getIdentifier()));
                             AstNode parent = name.getParent();
@@ -114,23 +111,10 @@ public class Obfuscator {
             });
     }
 
-    private void getRandomName(int nums) {
-        int len = 
-            }
-
     private void renameVar() {
         freshAST();
-        this.astRoot.visit(new NodeVisitor() {
-                private List<Scope> scopes = new ArrayList<Scope>();
-                public boolean visit(AstNode astNode) {
-                    if (astNode instanceof Scope) {
-                        scopes.add((Scope)astNode);
-                    } else if (astNode.getClass() == Name.class) {
-                        Name name = (Name)astNode;
-                    }
-                    return true;
-                }
-            });
+        VisitorRename visitorRename = new VisitorRename(this.astRoot);
+        this.astRoot.visit(visitorRename);
     }
     
     public void obfuscate() {
@@ -140,7 +124,9 @@ public class Obfuscator {
         //             return true;
         //         }
         //     });
-        this.globalVarToLocalVar();
+        //  this.globalVarToLocalVar();
+        this.renameVar();
+    
     }
 
     public void compress(Writer out) throws IOException {
