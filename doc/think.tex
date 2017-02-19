@@ -1,0 +1,62 @@
+% Created 2016-12-28 Wed 21:28
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\date{\today}
+\title{think}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 25.1.1 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\begin{enumerate}
+\item javascript 中所有变量都可以归属于某一个对象的属性。
+\end{enumerate}
+\begin{verbatim}
+var a = 1; // 在浏览器解释中，a 为 window 的一个属性，可以window.a 调用。
+\end{verbatim}
+\begin{enumerate}
+\item javascript 对象可以用字典的形式调用属性
+\end{enumerate}
+\begin{verbatim}
+person = new Object();
+person.name = "gin";
+person.age = 16;
+console.log(person["name"]); // => "gin"
+console.log(person["age"]); // => 16
+\end{verbatim}
+
+那么就可以通过ast找到所有的字面量，然后提出局部变量进行替换：
+\begin{verbatim}
+var a = document.getElementById('a');
+a.innerHTML = 'hello world';
+\end{verbatim}
+
+\begin{verbatim}
+(function(a, b, c, d, e, f){
+    a[d] = a[b][c](d);
+    a[d][e]=f;
+})(this, 'document', 'getElementById', 'a', 'innerHTML', 'hello world');
+\end{verbatim}
+
+然后通过打乱字符串，用数组存储所有的字符，通过拼接数组来获得参数。
+% Emacs 25.1.1 (Org mode 8.2.10)
+\end{document}

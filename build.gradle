@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "main.java.JsPatronum"
+
+applicationDefaultJvmArgs = ["-Djavafx.embed.singleThread=true"]
+
+dependencies {
+	compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+run {
+    args Eval.me("['-o', '.js:-new.js', 'hello.js']")
+}
