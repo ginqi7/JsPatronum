@@ -1,6 +1,7 @@
 package main.java;
 
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.*;
 
@@ -10,12 +11,26 @@ import java.io.Writer;
 
 public class Obfuscator {
     private AstRoot astRoot;
-    public Obfuscator(Reader in) throws IOException {
-        this.astRoot = new Parser(new CompilerEnvirons()).parse(in, null, 1);
+    private CompilerEnvirons compilerEnvirons = new CompilerEnvirons();
+    private ErrorReporter errorReporter;
+    public Obfuscator(Reader in, ErrorReporter errorReporter) throws IOException {
+        this.errorReporter = errorReporter;
+        this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(in, null, 1);
     }
 
     private void freshAST() {
-        this.astRoot = new Parser(new CompilerEnvirons()).parse(this.astRoot.toSource(), null, 1);
+        this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(this.astRoot.toSource(), null, 1);
+    }
+
+    private void printAst() {
+        this.astRoot.visit(new NodeVisitor() {
+                @Override
+                public boolean visit(AstNode astNode) {
+                    System.out.println(astNode.getClass());
+                    return true;
+                }
+                
+            });
     }
 
     private void globalVarToLocalVar() {
@@ -25,35 +40,6 @@ public class Obfuscator {
         VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap());
         this.freshAST();
         this.astRoot.visit(visitorGlobalToLocal);
-        //     final Map<String, String> paramMapF = paramMap;
-            //     freshAST();
-        //     this.astRoot.visit(new NodeVisitor(){
-        //                 private List<Scope> scopes = new ArrayList<Scope>();
-        //                 public boolean visit(AstNode astNode) {
-        //                     if (astNode.getClass() == FunctionNode.class) {
-        //                         this.scopes.add((Scope) astNode);
-        //                     }
-        //                     if (astNode.getClass() == Name.class) {
-        //                         Name name = (Name)astNode;
-        //                         name.setIdentifier(paramMapF.get(name.getIdentifier()));
-        //                         AstNode parent = name.getParent();
-        //                         if (parent.getClass() == VariableInitializer.class) {
-        //                             VariableInitializer variableInitializer = (VariableInitializer)parent;
-        //                             AstNode variableDeclaration = variableInitializer.getParent();
-        //                             AstNode top = variableDeclaration.getParent();
-        //                             ExpressionStatement expressionStatement = new ExpressionStatement();
-        //                             Assignment assignment = new Assignment();
-        //                             assignment.setLeft(name);
-        //                             assignment.setRight(variableInitializer.getInitializer());
-        //                             System.out.println(variableInitializer.getTarget().getClass());
-        //                             assignment.setOperator(Token.ASSIGN);
-        //                             expressionStatement.setExpression(assignment);
-        //                             top.replaceChild(variableDeclaration, expressionStatement);
-        //                         }
-        //                     }
-        //                     return true;
-        //                 }
-        //         });
     }
 
     private void renameVar() {
@@ -63,56 +49,23 @@ public class Obfuscator {
     }
     
     public void obfuscate() {
-        // this.astRoot.visit(new NodeVisitor(){
-        //         public boolean visit(AstNode astNode) {
-        //             System.out.println(astNode.getClass());
-        //             return true;
-        //         }
-        //     });
-        //        this.globalVarToLocalVar();
+        // this.printAst();
         this.globalVarToLocalVar();
         this.freshAST();
         this.renameVar();
     
     }
 
+    enum State {
+        BEGIN, S_STR, D_STR, END
+    }
+
     public void compress(Writer out) throws IOException {
-        out.write(this.astRoot.toSource());
-   
-        // String source = astRoot.toSource();
-        // StringBuffer compressedSource = new StringBuffer();
-        // int position = 0;
-        // while (position < source.length()) {
-        //     char currentChar = source.charAt(position);
-        //     if (currentChar == '\n') {
-        //         position++;
-        //         while (position < source.length() &&
-        //                source.charAt(position) == ' ') {
-        //             position++;
-        //         }
-        //     }
-        //     else if (currentChar == ' ' &&
-        //              (Build_in.notNameSymbol.contains(source.charAt(position+1)) ||
-        //               source.charAt(position+1) == ' ')) {
-        //         position++;
-        //     }
-        //     else if (Build_in.notNameSymbol.contains(currentChar) && source.charAt(position+1) == ' ') {
-        //         compressedSource.append(currentChar);
-        //         position += 2;
-        //     }
-        //     else if (currentChar == '\t') {
-        //         position++;
-        //     } else {
-        //         compressedSource.append(currentChar);
-        //         position++;
-        //     }
-        // }
-        // try {
-        //     //out.write(astRoot.toSource());
-        //     out.write(compressedSource.toString());
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-       
+        State state = State.BEGIN;
+        String source = this.astRoot.toSource();
+        StringBuffer compressedBuffer = new StringBuffer();
+        String[] sources = source.split(" |\n");
+        //        out.write(astRoot.toSource());
+		out.write(compressedBuffer.toString());
     }
 }

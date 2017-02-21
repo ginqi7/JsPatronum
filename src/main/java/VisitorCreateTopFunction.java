@@ -67,7 +67,7 @@ public class VisitorCreateTopFunction implements NodeVisitor{
             List<AstNode> arguments = createArguments(symbols);
             ParenthesizedExpression parenthesizedExpression = new ParenthesizedExpression();
             FunctionNode functionNode = new FunctionNode();
-            List<AstNode> params = createParams(symbols, paramMap);
+            List<AstNode> params = createParams(symbols, this.paramMap);
             Block block = new Block();
             List<AstNode> statements = scriptNode.getStatements();
             for (AstNode statement : statements) {

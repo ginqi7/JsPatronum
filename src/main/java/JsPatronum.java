@@ -1,7 +1,11 @@
 package main.java;
 
 import jargs.gnu.CmdLineParser;
+
 import java.io.*;
+
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
 public class JsPatronum {
     public static void main(String args[]) {
@@ -58,8 +62,35 @@ public class JsPatronum {
                 if (pattern.length > 1 && files.size() > 0) {
                     outputFilename = inputFilename.replaceFirst(pattern[0], pattern[1]);
                 }
-                
-                Obfuscator obfuscator = new Obfuscator(in);
+
+                final String localFilename = inputFilename;
+                Obfuscator obfuscator = new Obfuscator(in, new ErrorReporter() {
+                        public void warning(String message, String sourceName,
+                                            int line, String lineSource, int lineOffset) {
+                            System.err.println("\n[WARNING] in " + localFilename);
+                            if (line < 0) {
+                                System.err.println("  " + message);
+                            } else {
+                                System.err.println("  " + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public void error(String message, String sourceName,
+                                          int line, String lineSource, int lineOffset) {
+                            System.err.println("[ERROR] in " + localFilename);
+                            if (line < 0) {
+                                System.err.println("  " + message);
+                            } else {
+                                System.err.println("  " + line + ':' + lineOffset + ':' + message);
+                            }
+                        }
+
+                        public EvaluatorException runtimeError(String message, String sourceName,
+                                                               int line, String lineSource, int lineOffset) {
+                            error(message, sourceName, line, lineSource, lineOffset);
+                            return new EvaluatorException(message);
+                        }
+                    });
 
                 // 关闭输入流，打开输出流，防止输入文件被覆盖
                 in.close();

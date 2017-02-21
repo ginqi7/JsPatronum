@@ -31,6 +31,10 @@ public class VisitorGlobalToLocal implements NodeVisitor {
         }
         if (astNode.getClass() == Name.class) {
             Name name = (Name)astNode;
+            String nameStr = name.getIdentifier();
+            if (!paramMap.containsKey(nameStr)) {
+                return true;
+            }
             name.setIdentifier(paramMap.get(name.getIdentifier()));
             AstNode parent = name.getParent();
             if (parent.getClass() == VariableInitializer.class) {
@@ -47,8 +51,7 @@ public class VisitorGlobalToLocal implements NodeVisitor {
                 top.replaceChild(variableDeclaration, expressionStatement);
             }
         }
-            
-        return false;
-        }
+        return true;
+    }
 
 }

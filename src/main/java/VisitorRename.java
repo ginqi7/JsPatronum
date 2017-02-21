@@ -28,7 +28,8 @@ public class VisitorRename implements NodeVisitor {
             Map<String, String> nameMap = scopeMap.get(scope);
             if (!nameMap.containsKey(nameStr)) {
                 String newName = Tool.getRandomName(Tool.lengthOfVar(nums));
-                while (nameMap.containsValue(newName)) {
+                while (nameMap.containsValue(newName) ||
+                       Build_in.keepKeywords.contains(newName)) {
                     newName = Tool.getRandomName(nums);
                 }
                 nameMap.put(nameStr, newName);
@@ -38,5 +39,3 @@ public class VisitorRename implements NodeVisitor {
         return true;
     }
 }
-
-
