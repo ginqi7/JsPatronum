@@ -9,8 +9,10 @@ import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.VariableInitializer;
 
@@ -43,12 +45,20 @@ public class VisitorGlobalToLocal implements NodeVisitor {
                 AstNode top = variableDeclaration.getParent();
                 ExpressionStatement expressionStatement = new ExpressionStatement();
                 Assignment assignment = new Assignment();
-                assignment.setLeft(name);
-                assignment.setRight(variableInitializer.getInitializer());
-                System.out.println(variableInitializer.getTarget().getClass());
-                assignment.setOperator(Token.ASSIGN);
-                expressionStatement.setExpression(assignment);
-                top.replaceChild(variableDeclaration, expressionStatement);
+                PropertyGet propertyGet = new PropertyGet();
+                KeywordLiteral keywordLiteral = new KeywordLiteral();
+                propertyGet = ;
+                // VariableInitializer variableInitializer = (VariableInitializer)parent;
+                    // AstNode variableDeclaration = variableInitializer.getParent();
+                // AstNode top = variableDeclaration.getParent();
+                // ExpressionStatement expressionStatement = new ExpressionStatement();
+                // Assignment assignment = new Assignment();
+                // assignment.setLeft(name);
+                // assignment.setRight(variableInitializer.getInitializer());
+                // System.out.println(variableInitializer.getTarget().getClass());
+                // assignment.setOperator(Token.ASSIGN);
+                // expressionStatement.setExpression(assignment);
+                // top.replaceChild(variableDeclaration, expressionStatement);
             }
         }
         return true;

@@ -49,10 +49,10 @@ public class Obfuscator {
     }
     
     public void obfuscate() {
-        // this.printAst();
-        this.globalVarToLocalVar();
-        this.freshAST();
-        this.renameVar();
+        this.printAst();
+        // this.globalVarToLocalVar();
+        // this.freshAST();
+        // this.renameVar();
     
     }
 
