@@ -48,22 +48,6 @@ public class VisitorGlobalToLocal implements NodeVisitor {
                 AstNode top = variableDeclaration.getParent();
                 ExpressionStatement expressionStatement = new ExpressionStatement();
                 Assignment assignment = new Assignment();
-<<<<<<< HEAD
-                PropertyGet propertyGet = new PropertyGet();
-                KeywordLiteral keywordLiteral = new KeywordLiteral();
-                propertyGet = ;
-                // VariableInitializer variableInitializer = (VariableInitializer)parent;
-                    // AstNode variableDeclaration = variableInitializer.getParent();
-                // AstNode top = variableDeclaration.getParent();
-                // ExpressionStatement expressionStatement = new ExpressionStatement();
-                // Assignment assignment = new Assignment();
-                // assignment.setLeft(name);
-                // assignment.setRight(variableInitializer.getInitializer());
-                // System.out.println(variableInitializer.getTarget().getClass());
-                // assignment.setOperator(Token.ASSIGN);
-                // expressionStatement.setExpression(assignment);
-                // top.replaceChild(variableDeclaration, expressionStatement);
-=======
                 ElementGet elementGet = new ElementGet();
                 KeywordLiteral keywordLiteral = new KeywordLiteral();
                 keywordLiteral.setType(Token.THIS);
@@ -84,7 +68,6 @@ public class VisitorGlobalToLocal implements NodeVisitor {
 				elementGet.setElement(name);
                 arguments.add(elementGet);
                 functionCall.setArguments(arguments);
->>>>>>> 5a8386177e30ce7f78b1476732361dbc73d0a325
             }
         }
         return true;

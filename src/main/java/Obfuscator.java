@@ -27,9 +27,9 @@ public class Obfuscator {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
-                    // System.out.println(astNode.getClass());
-                    for (TopLevel.Builtins c : TopLevel.Builtins.values())
-                        System.out.println(c);
+                    System.out.println(astNode.getClass());
+                    // for (TopLevel.Builtins c : TopLevel.Builtins.values())
+                    //     System.out.println(c);
                     // if (astNode.getClass() == ElementGet.class) {
                     //     System.out.println(((ElementGet)astNode).getTarget().getClass());
                     //     System.out.println(((ElementGet)astNode).getElement().getClass());
@@ -56,7 +56,7 @@ public class Obfuscator {
     }
     
     public void obfuscate() {
-        this.printAst();
+        // this.printAst();
         // this.globalVarToLocalVar();
         // this.freshAST();
         // this.renameVar();

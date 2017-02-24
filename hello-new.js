@@ -1,4 +1,2 @@
-(function(A) {
-  this[A] = 10;
-  console.log(this[A]);
-})("hello");
+var hello = 10;
+console.log(hello);
