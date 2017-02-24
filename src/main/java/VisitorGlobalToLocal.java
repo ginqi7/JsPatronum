@@ -11,10 +11,10 @@ import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
-import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.VariableInitializer;
@@ -68,6 +68,27 @@ public class VisitorGlobalToLocal implements NodeVisitor {
 				elementGet.setElement(name);
                 arguments.add(elementGet);
                 functionCall.setArguments(arguments);
+            } else if (parent.getClass() == Assignment.class) {
+                Assignment assignment = (Assignment)parent;
+                ElementGet elementGet = new ElementGet();
+                KeywordLiteral keywordLiteral = new KeywordLiteral();
+                keywordLiteral.setType(Token.THIS);
+                elementGet.setTarget(keywordLiteral);
+				elementGet.setElement(name);
+                assignment.setLeft(elementGet);
+            } else if (parent.getClass() == InfixExpression.class) {
+                InfixExpression infixExpression = (InfixExpression)parent;
+                ElementGet elementGet = new ElementGet();
+                KeywordLiteral keywordLiteral = new KeywordLiteral();
+                keywordLiteral.setType(Token.THIS);
+                elementGet.setTarget(keywordLiteral);
+				elementGet.setElement(name);
+                if (infixExpression.getLeft().getClass() == Name.class) {
+                    infixExpression.setLeft(elementGet);
+                } else {
+                    infixExpression.setRight(elementGet);
+                }
+
             }
         }
         return true;

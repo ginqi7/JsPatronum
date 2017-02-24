@@ -3,7 +3,6 @@ package main.java;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.Parser;
-import org.mozilla.javascript.TopLevel;
 import org.mozilla.javascript.ast.*;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class Obfuscator {
                     //     System.out.println(((ElementGet)astNode).getTarget().getClass());
                     //     System.out.println(((ElementGet)astNode).getElement().getClass());
                     // }
-                    return false;
+                    return true;
                 }
                 
             });
@@ -54,13 +53,26 @@ public class Obfuscator {
         VisitorRename visitorRename = new VisitorRename(this.astRoot);
         this.astRoot.visit(visitorRename);
     }
+
+    private void changeNumber() {
+        freshAST();
+        VisitorChangeNumber visitorChangeNumber = new VisitorChangeNumber();
+        this.astRoot.visit(visitorChangeNumber);
+    }
+
+    private void stringLiteralToGloableVar() {
+        freshAST();
+        VisitorStringLiteral visitorStringLiteral = new VisitorStringLiteral(this.astRoot);
+        this.astRoot.visit(visitorStringLiteral);
+    }
     
     public void obfuscate() {
-        // this.printAst();
-        // this.globalVarToLocalVar();
-        // this.freshAST();
-        // this.renameVar();
-    
+        this.printAst();
+        this.globalVarToLocalVar();
+        this.freshAST();
+        this.renameVar();
+        this.changeNumber();
+        this.stringLiteralToGloableVar();
     }
 
     enum State {

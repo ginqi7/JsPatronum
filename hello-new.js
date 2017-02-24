@@ -1,2 +1,3 @@
-var hello = 10;
-console.log(hello);
+(function(x) {
+  this[x] = 10.2;
+})("hello");
