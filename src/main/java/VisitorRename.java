@@ -17,7 +17,7 @@ public class VisitorRename implements NodeVisitor {
         astRoot.visit(this.visitorGetName);
     }
     public boolean visit(AstNode astNode) {
-        if (astNode.getClass() == Name.class) {
+        if (astNode.getClass() == Name.class && ((Name)astNode).getDefiningScope() != null) {
             Name name = (Name)astNode;
             Scope scope = name.getDefiningScope();
             int nums = this.visitorGetName.getNumbers();
