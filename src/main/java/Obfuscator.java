@@ -3,6 +3,7 @@ package main.java;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.Parser;
+import org.mozilla.javascript.TopLevel;
 import org.mozilla.javascript.ast.*;
 
 import java.io.IOException;
@@ -26,8 +27,14 @@ public class Obfuscator {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
-                    System.out.println(astNode.getClass());
-                    return true;
+                    // System.out.println(astNode.getClass());
+                    for (TopLevel.Builtins c : TopLevel.Builtins.values())
+                        System.out.println(c);
+                    // if (astNode.getClass() == ElementGet.class) {
+                    //     System.out.println(((ElementGet)astNode).getTarget().getClass());
+                    //     System.out.println(((ElementGet)astNode).getElement().getClass());
+                    // }
+                    return false;
                 }
                 
             });
@@ -61,11 +68,12 @@ public class Obfuscator {
     }
 
     public void compress(Writer out) throws IOException {
-        State state = State.BEGIN;
-        String source = this.astRoot.toSource();
-        StringBuffer compressedBuffer = new StringBuffer();
-        String[] sources = source.split(" |\n");
-        //        out.write(astRoot.toSource());
-		out.write(compressedBuffer.toString());
+        // State state = State.BEGIN;
+        // String source = this.astRoot.toSource();
+        // StringBuffer compressedBuffer = new StringBuffer();
+        // String[] sources = source.split(" |\n");
+        this.freshAST();
+        out.write(this.astRoot.toSource());
+        // out.write(compressedBuffer.toString());
     }
 }
