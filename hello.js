@@ -1,1 +1,1 @@
-var hello = 10.2;
+var hello = "hello world"

@@ -1,0 +1,34 @@
+#+TITLE: JavaScript 代码混淆器
+#+AUTHOR: 金琪琦
+#+OPTIONS: H:1 toc:nil
+#+LATEX_CLASS: beamer
+#+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
+#+BEAMER_THEME: default
+#+BEAMER_COLOR_THEME:
+#+BEAMER_FONT_THEME:
+#+BEAMER_INNER_THEME:
+#+BEAMER_OUTER_THEME:
+#+BEAMER_HEADER:
+#+LATEX_HEADER: \usepackage{xeCJK}
+#+LATEX_HEADER: \setCJKmainfont{Inziu Iosevka TC}
+
+* 背景
+代码混淆（Obfuscated code）是指将计算机程序的代码，转换成一种功能上等价，但是难于阅读和理解的形式。
+Android 的 apk 就默认使用了代码混淆，使得反编译 APK 变得比较困难。
+* 争议
+观点一：
+#+BEGIN_QUOTE
+前端代码公开，没有秘密，本身代码就没有保护的意义。
+#+END_QUOTE
+观点二：
+#+BEGIN_QUOTE
+正因为前端程序是以源码的形式展示在用户面前，才需要通过代码混淆的方式使得代码难以阅读从而增强前端代码的安全性，进一步保护自己的系统。
+#+END_QUOTE
+* 为何前端使用代码混淆的
+
+* 开发环境
+- 语言：Java
+- 平台：跨平台
+* 混淆方法
+- 正则替换
+- 抽象语法树（AST）

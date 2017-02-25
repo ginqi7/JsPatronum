@@ -1,3 +1,1 @@
-(function(x) {
-  this[x] = 10.2;
-})("hello");
+(function(q,r){this[q]=r;})("hello","'hello world'");
