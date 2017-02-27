@@ -1,1 +1,1 @@
-(function(q,r){this[q]=r;})("hello","'hello world'");
+(function(F,I){F[I]=0xa;hell=0x64;})(this,"hello");

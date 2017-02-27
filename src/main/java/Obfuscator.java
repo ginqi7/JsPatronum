@@ -27,12 +27,6 @@ public class Obfuscator {
                 @Override
                 public boolean visit(AstNode astNode) {
                     System.out.println(astNode.getClass());
-                    // for (TopLevel.Builtins c : TopLevel.Builtins.values())
-                    //     System.out.println(c);
-                    // if (astNode.getClass() == ElementGet.class) {
-                    //     System.out.println(((ElementGet)astNode).getTarget().getClass());
-                    //     System.out.println(((ElementGet)astNode).getElement().getClass());
-                    // }
                     return true;
                 }
                 
@@ -41,9 +35,12 @@ public class Obfuscator {
 
     private void globalVarToLocalVar() {
         this.freshAST();
+        VisitorNullScope visitorNullScope = new VisitorNullScope();
+        this.astRoot.visit(visitorNullScope);
+        this.freshAST();
         VisitorCreateTopFunction visitorCreateTopFunction = new VisitorCreateTopFunction();
         this.astRoot.visit(visitorCreateTopFunction);
-        VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap());
+        VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap(), visitorCreateTopFunction.getThisName());
         this.freshAST();
         this.astRoot.visit(visitorGlobalToLocal);
     }
@@ -69,13 +66,20 @@ public class Obfuscator {
         VisitorStringLiteral visitorStringLiteral = new VisitorStringLiteral(functionCall, functionNode);
         functionNode.visit(visitorStringLiteral);
     }
+
+    private void propertyToElement() {
+        this.freshAST();
+        VisitorPropertyToElement visitorPropertyToElement = new VisitorPropertyToElement();
+        this.astRoot.visit(visitorPropertyToElement);
+    }
     
     public void obfuscate() {
         this.printAst();
         this.globalVarToLocalVar();
+        this.propertyToElement();
         this.stringLiteralToGloableVar();
         this.renameVar();
-        this.changeNumber();
+        this.changeNumber(); 
     }
 
     public void compress(Writer out) throws IOException {

@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.Block;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.ParenthesizedExpression;
@@ -19,9 +21,15 @@ import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.Symbol;
 
 public class VisitorCreateTopFunction implements NodeVisitor{
+
     private Map<String, String> paramMap = new HashMap<String, String>();
+    private Name thisName;
+    
     private List<AstNode> createArguments(List<Symbol> symbols) {
         List<AstNode> arguments = new ArrayList<AstNode>();
+        KeywordLiteral keywordLiteral = new KeywordLiteral();
+        keywordLiteral.setType(Token.THIS);
+        arguments.add(keywordLiteral);
         for (Symbol symbol : symbols) {
             StringLiteral stringLiteral = new StringLiteral();
             stringLiteral.setValue(symbol.getName());
@@ -29,34 +37,33 @@ public class VisitorCreateTopFunction implements NodeVisitor{
             arguments.add(stringLiteral);
         }
         return arguments;
-        // class org.mozilla.javascript.ast.AstRoot
-        //     class org.mozilla.javascript.ast.ExpressionStatement
-        //     class org.mozilla.javascript.ast.FunctionCall
-        //     class org.mozilla.javascript.ast.ParenthesizedExpression
-        //     class org.mozilla.javascript.ast.FunctionNode
-        //     class org.mozilla.javascript.ast.Name
-        //     class org.mozilla.javascript.ast.Block
-        //     class org.mozilla.javascript.ast.StringLiteral
     }
 
-    private List<AstNode> createParams(List<Symbol> symbols, Map<String, String> paramMap) {
+    private List<AstNode> createParams(List<Symbol> symbols) {
         List<AstNode> params = new ArrayList<AstNode>();
-        int index = 0;
-        for (Symbol symbol : symbols) {
-            Name name = new Name();
-            String nameStr = "_" + index;
+        Name name = new Name();
+        String nameStr = "_";
+        name.setIdentifier(nameStr);
+        params.add(name);
+        this.thisName = name;
+        for (int i = 0; i < symbols.size(); i++) {
+            name = new Name();
+            nameStr = "_" + i;
             name.setIdentifier(nameStr);
             params.add(name);
-            paramMap.put(symbol.getName(), nameStr);
-            index++;
+            this.paramMap.put(symbols.get(i).getName(), nameStr);
         }
         return params;
     }
 
-    public Map<String, String> getParamMap() {
+    public Map<String, String> getParamMap(){
         return this.paramMap;
     }
-    
+
+    public Name getThisName() {
+        return this.thisName;
+    }
+
     @Override
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == AstRoot.class) {
@@ -67,7 +74,7 @@ public class VisitorCreateTopFunction implements NodeVisitor{
             List<AstNode> arguments = createArguments(symbols);
             ParenthesizedExpression parenthesizedExpression = new ParenthesizedExpression();
             FunctionNode functionNode = new FunctionNode();
-            List<AstNode> params = createParams(symbols, this.paramMap);
+            List<AstNode> params = createParams(symbols);
             Block block = new Block();
             List<AstNode> statements = scriptNode.getStatements();
             for (AstNode statement : statements) {
