@@ -14,6 +14,7 @@ import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.VariableInitializer;
 
@@ -79,6 +80,13 @@ public class VisitorGlobalToLocal implements NodeVisitor {
                 } else {
                     infixExpression.setRight(elementGet);
                 }
+            } else if (parent.getClass() == PropertyGet.class &&
+                       ((PropertyGet)parent).getTarget() == name) {
+                PropertyGet propertyGet = (PropertyGet)parent;
+                ElementGet elementGet = new ElementGet();
+                elementGet.setTarget(this.thisName);
+                elementGet.setElement(name);
+                propertyGet.setTarget(elementGet);
             }
         }
         return true;

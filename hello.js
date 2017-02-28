@@ -1,2 +1,2 @@
-var hello = 10;
-hell = 100;
+var hello = "fuck you !";
+console.log(hello);

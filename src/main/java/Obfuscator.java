@@ -37,7 +37,6 @@ public class Obfuscator {
         this.freshAST();
         VisitorNullScope visitorNullScope = new VisitorNullScope();
         this.astRoot.visit(visitorNullScope);
-        this.freshAST();
         VisitorCreateTopFunction visitorCreateTopFunction = new VisitorCreateTopFunction();
         this.astRoot.visit(visitorCreateTopFunction);
         VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap(), visitorCreateTopFunction.getThisName());
@@ -72,40 +71,47 @@ public class Obfuscator {
         VisitorPropertyToElement visitorPropertyToElement = new VisitorPropertyToElement();
         this.astRoot.visit(visitorPropertyToElement);
     }
+
+    private void stringToArray() {
+        this.freshAST();
+        VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
+        this.astRoot.visit(visitorStringToArray);
+    }
     
     public void obfuscate() {
         this.printAst();
         this.globalVarToLocalVar();
         this.propertyToElement();
         this.stringLiteralToGloableVar();
+        this.stringToArray();
         this.renameVar();
         this.changeNumber(); 
     }
 
     public void compress(Writer out) throws IOException {
         this.freshAST();
-        
-        boolean isString = false;
-        String source = this.astRoot.toSource();
-        StringBuffer compressedBuffer = new StringBuffer();
-        String[] sources = source.split(" |\n");
-        for (String word : sources) {
-            String[] split = word.split("\"");
-            //System.out.println(split.length);
-            if (!word.isEmpty()) {
-                compressedBuffer.append(word);
-                if (!isString &&
-                    split.length % 2 == 0) {
-                    isString = true;
-                } else if (split.length % 2 == 0) {
-                    isString = false;
-                }
-            }
-            if (isString) {
-                compressedBuffer.append(" ");
-            }
-        }
-        // out.write(this.astRoot.toSource());
-        out.write(compressedBuffer.toString());
+        // boolean isString = false;
+        // String source = this.astRoot.toSource();
+        // StringBuffer compressedBuffer = new StringBuffer();
+        // String[] sources = source.split(" |\n");
+        // for (String word : sources) {
+        //     String[] split = word.split("\"");
+        //     //System.out.println(split.length);
+        //     if (!word.isEmpty()) {
+        //         compressedBuffer.append(word);
+        //         if (!isString &&
+        //             split.length % 2 == 0) {
+        //             isString = true;
+        //         } else if (split.length % 2 == 0) {
+        //             isString = false;
+        //         }
+        //     }
+        //     if (isString) {
+        //         compressedBuffer.append(" ");
+        //     }
+        // }
+        // out.write(compressedBuffer.toString());
+        out.write(this.astRoot.toSource());
+
     }
 }

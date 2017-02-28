@@ -24,37 +24,70 @@ public class VisitorCreateTopFunction implements NodeVisitor{
 
     private Map<String, String> paramMap = new HashMap<String, String>();
     private Name thisName;
-    
-    private List<AstNode> createArguments(List<Symbol> symbols) {
+
+    private List<AstNode> createArguments(List<String> globalNames) {
         List<AstNode> arguments = new ArrayList<AstNode>();
         KeywordLiteral keywordLiteral = new KeywordLiteral();
         keywordLiteral.setType(Token.THIS);
         arguments.add(keywordLiteral);
-        for (Symbol symbol : symbols) {
+        
+        for (String globalName : globalNames) {
             StringLiteral stringLiteral = new StringLiteral();
-            stringLiteral.setValue(symbol.getName());
+            stringLiteral.setValue(globalName);
             stringLiteral.setQuoteCharacter('"');
             arguments.add(stringLiteral);
         }
         return arguments;
     }
 
-    private List<AstNode> createParams(List<Symbol> symbols) {
+    
+// private List<AstNode> createArguments(List<Symbol> symbols) {
+//     List<AstNode> arguments = new ArrayList<AstNode>();
+//     KeywordLiteral keywordLiteral = new KeywordLiteral();
+//     keywordLiteral.setType(Token.THIS);
+//     arguments.add(keywordLiteral);
+//     for (Symbol symbol : symbols) {
+//         StringLiteral stringLiteral = new StringLiteral();
+//         stringLiteral.setValue(symbol.getName());
+//         stringLiteral.setQuoteCharacter('"');
+//         arguments.add(stringLiteral);
+//     }
+//     return arguments;
+// }
+
+    private List<AstNode> createParams(List<String> globalNames) {
         List<AstNode> params = new ArrayList<AstNode>();
         Name name = new Name();
         String nameStr = "_";
         name.setIdentifier(nameStr);
         params.add(name);
         this.thisName = name;
-        for (int i = 0; i < symbols.size(); i++) {
+        for (int i = 0; i < globalNames.size(); i++) {
             name = new Name();
             nameStr = "_" + i;
             name.setIdentifier(nameStr);
             params.add(name);
-            this.paramMap.put(symbols.get(i).getName(), nameStr);
+            this.paramMap.put(globalNames.get(i), nameStr);
         }
         return params;
     }
+
+    // private List<AstNode> createParams(List<Symbol> symbols) {
+    //     List<AstNode> params = new ArrayList<AstNode>();
+    //     Name name = new Name();
+    //     String nameStr = "_";
+    //     name.setIdentifier(nameStr);
+    //     params.add(name);
+    //     this.thisName = name;
+    //     for (int i = 0; i < symbols.size(); i++) {
+    //         name = new Name();
+    //         nameStr = "_" + i;
+    //         name.setIdentifier(nameStr);
+    //         params.add(name);
+    //         this.paramMap.put(symbols.get(i).getName(), nameStr);
+    //     }
+    //     return params;
+    // }
 
     public Map<String, String> getParamMap(){
         return this.paramMap;
@@ -67,16 +100,18 @@ public class VisitorCreateTopFunction implements NodeVisitor{
     @Override
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == AstRoot.class) {
-            ScriptNode scriptNode = (ScriptNode)astNode;
-            List<Symbol> symbols = scriptNode.getSymbols();
+            AstRoot astRoot = (AstRoot)astNode;
+            VisitorGetName visitorGetName = new VisitorGetName();
+            astRoot.visit(visitorGetName);
+            List<String> globalNames = visitorGetName.getGlobalNames();
             ExpressionStatement expressionStatement = new ExpressionStatement();
             FunctionCall functionCall = new FunctionCall();
-            List<AstNode> arguments = createArguments(symbols);
+            List<AstNode> arguments = createArguments(globalNames);
             ParenthesizedExpression parenthesizedExpression = new ParenthesizedExpression();
             FunctionNode functionNode = new FunctionNode();
-            List<AstNode> params = createParams(symbols);
+            List<AstNode> params = createParams(globalNames);
             Block block = new Block();
-            List<AstNode> statements = scriptNode.getStatements();
+            List<AstNode> statements = astRoot.getStatements();
             for (AstNode statement : statements) {
                 block.addChild(statement);
             }
