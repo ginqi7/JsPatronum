@@ -1,4 +1,4 @@
-% Created 2017-03-04 Sat 22:05
+% Created 2017-03-05 Sun 09:11
 \documentclass[presentation]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -105,29 +105,82 @@ Android 的 apk 就默认使用了代码混淆，使得反编译 APK 变得比�
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[label=sec-7]{混淆方法}
+\begin{frame}[label=sec-7]{混淆方法-代码压缩}
 \begin{block}{代码压缩}
 
 高级语言中很多的元素都是给人看的，机器执行并不会用到它。例如：空白符号、注释、有意义的变量名等。因此，我们删除这些供人阅读的信息，一方面可以减少代码的体积增加传输效率，另一方面可以给用户阅读带来很大的困难，从而保护代码。
 \end{block}
 \begin{block}{缺点}
 仅仅通过代码压缩，很容易被一些代码美化工具所还原。
-
+\end{block}
+\begin{block}{作用}
 因此在一个完整的代码混淆器中，代码压缩通常会作为最后一步用来锦上添花。
 \end{block}
 \end{frame}
-\begin{frame}[label=sec-8]{混淆方法}
+\begin{frame}[label=sec-8]{混淆方法-正则替换}
 \begin{block}{正则替换}
 代码混淆是一种功能等效源代码之间的转换，可以看作是字符串的转换，因此正则替换是一种处理字符串简单易行的方式。
 \end{block}
 \begin{block}{缺点}
 然而正则替换只是纯粹的字符串转换，它不能了解程序的逻辑，所能做的工作有限，出错的概率也较高。
-
-通常使用正则替换来实现一些简单的代码混淆或者作为
+\end{block}
+\begin{block}{作用}
+通常使用正则替换来实现一些简单的代码混淆。
 \end{block}
 \end{frame}
-\begin{frame}[label=sec-9]{混淆方法}
-\begin{block}{抽象语法树替换（AST）}
+\begin{frame}[label=sec-9]{混淆方法-AST替换}
+\begin{block}{抽象语法树（AST）}
+在源代码的解释和编译过程中，语法分析器创建出抽象语法树，它是源代码的抽象语法结构的树状表现形式，树上的每个节点都表示源代码中的一种结构。一颗抽象语法树展示一个程序的完整语法结构，并不会包含真实语法中出现的每个细节，
+\end{block}
+\begin{block}{抽象语法树替换}
+抽象语法树代表了一个程序的完整语法结构，那么我们可以通过对语法树的调整构造一个功能等效但难以阅读的混淆程序。
+\end{block}
+\begin{block}{混淆步骤}
+\begin{enumerate}
+\item 通过某个 JavaScript 引擎解析 javaScript 程序生成 AST；
+\item 遍历语法树，并根据适当的混淆规则对语法树进行调整；
+\item 通过 JS 引擎将调整后的语法树转换为 JS 源代码，这个代码就是混淆后的代码。
+\end{enumerate}
+\end{block}
+\end{frame}
+\begin{frame}[label=sec-10]{混淆策略}
+\begin{enumerate}
+\item 变量名替换
+\begin{itemize}
+\item 全局变量替换为 window 的属性调用
+\item 属性调用替换为取元素操作[]
+\item 局部变量名随机化
+\end{itemize}
+\item 常量混淆
+\begin{itemize}
+\item 提取所有的字符串，通过字符数组打散
+\item 常量编码转换
+\end{itemize}
+\item 控制流替换
+\begin{itemize}
+\item 将普通的循环语句展开
+\item 将顺序执行的代码放置在精心设计的循环之中
+\end{itemize}
+\end{enumerate}
+\end{frame}
+\begin{frame}[label=sec-11]{自我防御机制}
+通过以上的混淆策略，对一段 JavaScript 代码进行适当的混淆、压缩就能起到很好的防御作用。但是前端代码作为源码展示在用户面前，攻击者拥有足够的耐心，对代码进行深入的调试，仍然有可能理清代码的逻辑。
+
+因此引入了 js 代码的自我防御机制
+\begin{block}{策略}
+\begin{enumerate}
+\item 禁止代码格式化和变量重命名
+\item 禁止代码调试
+\item 域名绑定
+\end{enumerate}
+\end{block}
+\end{frame}
+\begin{frame}[label=sec-12]{未来}
+前端代码天然是容易被破译的，所以尽可能把敏感的代码移动到后端是必须的，代码混淆只是在特定情形下的一种折衷。
+\begin{block}{WebAssembly}
+谷歌、苹果、微软和Mozilla的工程师正合力创建WebAssembly（又名wasm），这是能够运用在未来浏览器中承诺可带来20倍更快性能的字节码（bytecode）。WebAssembly项目创造全新的字节码（一种机器可读的指令集，能够更快为浏览器加载高级语言），让桌面和移动端浏览器相比较网页或者应用的整体源代码变得更加高效。
+
+WebAssembly 能够使得在浏览器上运行的不再是程序的源代码，会大大提高程序被破译的难度。
 \end{block}
 \end{frame}
 % Emacs 25.1.1 (Org mode 8.2.10)
