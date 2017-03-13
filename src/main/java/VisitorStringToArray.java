@@ -10,7 +10,6 @@ import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.Block;
 import org.mozilla.javascript.ast.ExpressionStatement;
-import org.mozilla.javascript.ast.ForLoop;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.Name;
@@ -94,7 +93,7 @@ public class VisitorStringToArray implements NodeVisitor {
             "return r}} "+
             "([\"a\"])";
         AstRoot tmpRoot = new Parser(new CompilerEnvirons()).parse(tmpSource, null, 1);
-		ExpressionStatement expressionStatement = (ExpressionStatement) tmpRoot.getFirstChild();
+        ExpressionStatement expressionStatement = (ExpressionStatement) tmpRoot.getFirstChild();
 		UnaryExpression unaryExpression = (UnaryExpression) expressionStatement.getExpression();
 		FunctionCall functionCall = (FunctionCall) unaryExpression.getOperand();
         functionCall.setArguments(this.createArguments());

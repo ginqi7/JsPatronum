@@ -16,9 +16,7 @@ import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.ParenthesizedExpression;
-import org.mozilla.javascript.ast.ScriptNode;
 import org.mozilla.javascript.ast.StringLiteral;
-import org.mozilla.javascript.ast.Symbol;
 
 public class VisitorCreateTopFunction implements NodeVisitor{
 

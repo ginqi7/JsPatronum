@@ -1,6 +1,7 @@
 package main.java;
 
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.*;
@@ -15,6 +16,7 @@ public class Obfuscator {
     private ErrorReporter errorReporter;
     public Obfuscator(Reader in, ErrorReporter errorReporter) throws IOException {
         this.errorReporter = errorReporter;
+        compilerEnvirons.setLanguageVersion(Context.VERSION_1_8);
         this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(in, null, 1);
     }
 
@@ -26,10 +28,22 @@ public class Obfuscator {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
-                    System.out.println(astNode.getClass());
+                    // String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
+                    // System.out.format(indent, "").println(astNode.getClass());
+                    if (astNode.getClass() == Name.class) {
+                        Name name = (Name)astNode;
+                        System.out.println(name.getIdentifier());
+                        System.out.println(name.isLocalName());
+                        System.out.println(((Name) astNode).isLocalName());
+                    }
+                    // if (astNode.getClass() == FunctionNode.class) {
+                    //     ScriptNode sn = (ScriptNode)astNode;
+                    //     for (Symbol symbol : sn.getSymbols()) {
+                    //         System.out.println(symbol);
+                    //     }
+                    // }
                     return true;
                 }
-                
             });
     }
 
@@ -46,6 +60,8 @@ public class Obfuscator {
 
     private void renameVar() {
         freshAST();
+        VisitorSetScope visitorSetScope = new VisitorSetScope();
+        this.astRoot.visit(visitorSetScope);
         VisitorRename visitorRename = new VisitorRename(this.astRoot);
         this.astRoot.visit(visitorRename);
     }

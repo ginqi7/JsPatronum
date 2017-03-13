@@ -12,7 +12,6 @@ public class VisitorChangeNumber implements NodeVisitor {
             NumberLiteral numberLiteral = (NumberLiteral)astNode;
             double number = numberLiteral.getNumber();
             Double numObj = new Double(number); 
-            System.out.println(numObj.intValue() == number);
             if (numObj.intValue() == number) {
                 numberLiteral.setValue("0x"+Integer.toHexString(numObj.intValue()));
             }
