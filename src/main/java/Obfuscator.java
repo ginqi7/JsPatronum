@@ -28,14 +28,14 @@ public class Obfuscator {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
-                    // String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
-                    // System.out.format(indent, "").println(astNode.getClass());
-                    if (astNode.getClass() == Name.class) {
-                        Name name = (Name)astNode;
-                        System.out.println(name.getIdentifier());
-                        System.out.println(name.isLocalName());
-                        System.out.println(((Name) astNode).isLocalName());
-                    }
+                    String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
+                    System.out.format(indent, "").println(astNode.getClass());
+                    // if (astNode.getClass() == Name.class) {
+                    //     Name name = (Name)astNode;
+                    //     System.out.println(name.getIdentifier());
+                    //     System.out.println(name.isLocalName());
+                    //     System.out.println(((Name) astNode).isLocalName());
+                    // }
                     // if (astNode.getClass() == FunctionNode.class) {
                     //     ScriptNode sn = (ScriptNode)astNode;
                     //     for (Symbol symbol : sn.getSymbols()) {
@@ -48,9 +48,7 @@ public class Obfuscator {
     }
 
     private void globalVarToLocalVar() {
-        this.freshAST();
-        VisitorNullScope visitorNullScope = new VisitorNullScope();
-        this.astRoot.visit(visitorNullScope);
+        this.freshAST(); 
         VisitorCreateTopFunction visitorCreateTopFunction = new VisitorCreateTopFunction();
         this.astRoot.visit(visitorCreateTopFunction);
         VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap(), visitorCreateTopFunction.getThisName());
@@ -63,7 +61,11 @@ public class Obfuscator {
         VisitorSetScope visitorSetScope = new VisitorSetScope();
         this.astRoot.visit(visitorSetScope);
         VisitorRename visitorRename = new VisitorRename(this.astRoot);
-        this.astRoot.visit(visitorRename);
+		ExpressionStatement expressionStatement = (ExpressionStatement) this.astRoot.getFirstChild();
+		FunctionCall functionCall = (FunctionCall) expressionStatement.getExpression();
+		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) functionCall.getTarget();
+		FunctionNode functionNode = (FunctionNode) parenthesizedExpression.getExpression();
+        functionNode.visit(visitorRename);
     }
 
     private void changeNumber() {
@@ -93,15 +95,27 @@ public class Obfuscator {
         VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
         this.astRoot.visit(visitorStringToArray);
     }
-    
+
+    private void Test() {
+        VisitorSetScope visitorSetScope = new VisitorSetScope();
+        this.astRoot.visit(visitorSetScope);
+        VisitorGlobalVar visitorGlobalVar = new VisitorGlobalVar();
+        this.astRoot.visit(visitorGlobalVar);
+        VisitorPropertyToElement visitorPropertyToElement = new VisitorPropertyToElement();
+        this.astRoot.visit(visitorPropertyToElement);
+        VisitorStringToVar visitorStringToVar = new VisitorStringToVar();
+        this.astRoot.visit(visitorStringToVar);
+    }
+
     public void obfuscate() {
-        this.printAst();
-        this.globalVarToLocalVar();
-        this.propertyToElement();
-        this.stringLiteralToGloableVar();
-        this.stringToArray();
-        this.renameVar();
-        this.changeNumber(); 
+        // this.printAst();
+        // this.globalVarToLocalVar();
+        // this.propertyToElement();
+        // this.stringLiteralToGloableVar();
+        // this.stringToArray();
+        // this.renameVar();
+        // this.changeNumber();
+        this.Test();
     }
 
     public void compress(Writer out) throws IOException {

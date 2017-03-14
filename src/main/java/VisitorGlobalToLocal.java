@@ -31,12 +31,12 @@ public class VisitorGlobalToLocal implements NodeVisitor {
     
     @Override
     public boolean visit(AstNode astNode) {
-        
         if (astNode.getClass() == FunctionNode.class) {
             this.scopes.add((Scope)astNode);
         } else if (astNode.getClass() == Name.class) {
             Name name = (Name)astNode; 
             String nameStr = name.getIdentifier();
+            System.out.println(paramMap.containsKey(nameStr));
             if (!paramMap.containsKey(nameStr)) {
                 return true;
             }

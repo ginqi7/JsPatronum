@@ -1,9 +1,3 @@
-var a = 10;
-function hello() {
-    var h = 10;
-    function kill() {
-        console.log(h);
-    }
-}
-
-hello();
+var a = {};
+a["hello"] = 10;
+console.log(a["hello"]);

@@ -6,6 +6,7 @@ import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.ScriptNode;
 import org.mozilla.javascript.ast.Symbol;
@@ -22,6 +23,15 @@ public class VisitorSetScope implements NodeVisitor {
         return false;
     }
 
+    private boolean isProperty(Name name) {
+        AstNode parentNode = name.getParent();
+        if (parentNode.getClass() == PropertyGet.class &&
+            ((PropertyGet)parentNode).getProperty() == name) {
+            return true;
+        }
+        return false;
+    }
+
     private Scope findScope(Name name) {
         Scope scope = null;
         AstNode parentNode = name.getParent();
@@ -34,14 +44,12 @@ public class VisitorSetScope implements NodeVisitor {
                 List<Symbol> symbols = scriptNode.getSymbols();
                 if (symbolsHasName(symbols, name)) {
                     scope = scriptNode;
-                } else {
-                    parentNode = parentNode.getParent();
                 }
             }
+            parentNode = parentNode.getParent();
         }
         return scope;
     }
-
     @Override
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == Name.class) {
@@ -49,8 +57,10 @@ public class VisitorSetScope implements NodeVisitor {
             Scope definingScope = name.getDefiningScope();
             if (definingScope != null) {
                 name.setScope(definingScope);
-            } else {
+            } else if (!isProperty(name)) {
                 name.setScope(findScope(name));
+            } else {
+                name.setScope(new Scope());
             }
         }
         return true;
