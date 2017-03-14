@@ -9,6 +9,7 @@ import org.mozilla.javascript.ast.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 
 public class Obfuscator {
     private AstRoot astRoot;
@@ -16,7 +17,6 @@ public class Obfuscator {
     private ErrorReporter errorReporter;
     public Obfuscator(Reader in, ErrorReporter errorReporter) throws IOException {
         this.errorReporter = errorReporter;
-        compilerEnvirons.setLanguageVersion(Context.VERSION_1_8);
         this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(in, null, 1);
     }
 
@@ -30,18 +30,6 @@ public class Obfuscator {
                 public boolean visit(AstNode astNode) {
                     String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
                     System.out.format(indent, "").println(astNode.getClass());
-                    // if (astNode.getClass() == Name.class) {
-                    //     Name name = (Name)astNode;
-                    //     System.out.println(name.getIdentifier());
-                    //     System.out.println(name.isLocalName());
-                    //     System.out.println(((Name) astNode).isLocalName());
-                    // }
-                    // if (astNode.getClass() == FunctionNode.class) {
-                    //     ScriptNode sn = (ScriptNode)astNode;
-                    //     for (Symbol symbol : sn.getSymbols()) {
-                    //         System.out.println(symbol);
-                    //     }
-                    // }
                     return true;
                 }
             });
@@ -103,12 +91,16 @@ public class Obfuscator {
         this.astRoot.visit(visitorGlobalVar);
         VisitorPropertyToElement visitorPropertyToElement = new VisitorPropertyToElement();
         this.astRoot.visit(visitorPropertyToElement);
-        VisitorStringToVar visitorStringToVar = new VisitorStringToVar();
-        this.astRoot.visit(visitorStringToVar);
+        VisitorLiteralToVar visitorLiteralToVar = new VisitorLiteralToVar();
+        this.astRoot.visit(visitorLiteralToVar);
+        VisitorTopFunction visitorTopFunction = new VisitorTopFunction(visitorLiteralToVar.getParams(), visitorLiteralToVar.getArguments());
+        this.astRoot.visit(visitorTopFunction);
+        VisitorTopFunction visitorTopFunction1 = new VisitorTopFunction(new ArrayList<AstNode>(), new ArrayList<AstNode>());
+        this.astRoot.visit(visitorTopFunction1);
     }
 
     public void obfuscate() {
-        // this.printAst();
+        this.printAst();
         // this.globalVarToLocalVar();
         // this.propertyToElement();
         // this.stringLiteralToGloableVar();

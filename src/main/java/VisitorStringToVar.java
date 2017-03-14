@@ -13,6 +13,7 @@ import org.mozilla.javascript.ast.StringLiteral;
 public class VisitorStringToVar implements NodeVisitor {
     private List<StringLiteral> stringLiterals = new ArrayList<StringLiteral>();
     private List<Name> names = new ArrayList<Name>();
+    
     private int count = 0;
 
     private Name addName() {

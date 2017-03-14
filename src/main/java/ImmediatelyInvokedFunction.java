@@ -5,20 +5,13 @@ import java.util.List;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.Block;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.NodeVisitor;
 
 public class ImmediatelyInvokedFunction {
-
-    private List<AstNode> arguments;
-    private List<AstNode> params;
-
-    public ImmediatelyInvokedFunction(String string, List<AstNode> params, List<AstNode> arguments, AstRoot astRoot) {
-        
-    }
-
-    private void addParamsAndArguments(AstRoot root, final List<AstNode> params, final List<AstNode> arguments) {
+    public static void addParamsAndArguments(AstRoot root, final List<AstNode> params, final List<AstNode> arguments) {
         root.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
@@ -31,15 +24,28 @@ public class ImmediatelyInvokedFunction {
                     }
                     return true;
                 }
-                
             });
     }
     
-    public AstRoot createImmediatelyInvokedFunction(String string, List<AstNode> params, List<AstNode> arguments) {
+    public static AstRoot createImmediatelyInvokedFunction(String string) {
         AstRoot root = new Parser().parse(string, null, 1);
-        this.addParamsAndArguments(root, params, arguments);
         return root;
     }
-
     
+    public static void addFunctionBody(AstRoot root, AstRoot astRoot) {
+        final List<AstNode> statements = astRoot.getStatements();
+        root.visit(new NodeVisitor() {
+                    @Override
+                    public boolean visit(AstNode astNode) {
+                        if (astNode.getClass() == Block.class) {
+                            for (AstNode statement : statements) {
+                                astNode.addChild(statement);
+                            }
+                            return false;
+                        }
+                        return true;
+                    }
+
+            });
+	}
 }

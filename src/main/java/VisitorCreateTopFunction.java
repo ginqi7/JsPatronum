@@ -38,21 +38,6 @@ public class VisitorCreateTopFunction implements NodeVisitor{
         return arguments;
     }
 
-    
-// private List<AstNode> createArguments(List<Symbol> symbols) {
-//     List<AstNode> arguments = new ArrayList<AstNode>();
-//     KeywordLiteral keywordLiteral = new KeywordLiteral();
-//     keywordLiteral.setType(Token.THIS);
-//     arguments.add(keywordLiteral);
-//     for (Symbol symbol : symbols) {
-//         StringLiteral stringLiteral = new StringLiteral();
-//         stringLiteral.setValue(symbol.getName());
-//         stringLiteral.setQuoteCharacter('"');
-//         arguments.add(stringLiteral);
-//     }
-//     return arguments;
-// }
-
     private List<AstNode> createParams(List<String> globalNames) {
         List<AstNode> params = new ArrayList<AstNode>();
         Name name = new Name();
@@ -69,23 +54,6 @@ public class VisitorCreateTopFunction implements NodeVisitor{
         }
         return params;
     }
-
-    // private List<AstNode> createParams(List<Symbol> symbols) {
-    //     List<AstNode> params = new ArrayList<AstNode>();
-    //     Name name = new Name();
-    //     String nameStr = "_";
-    //     name.setIdentifier(nameStr);
-    //     params.add(name);
-    //     this.thisName = name;
-    //     for (int i = 0; i < symbols.size(); i++) {
-    //         name = new Name();
-    //         nameStr = "_" + i;
-    //         name.setIdentifier(nameStr);
-    //         params.add(name);
-    //         this.paramMap.put(symbols.get(i).getName(), nameStr);
-    //     }
-    //     return params;
-    // }
 
     public Map<String, String> getParamMap(){
         return this.paramMap;
