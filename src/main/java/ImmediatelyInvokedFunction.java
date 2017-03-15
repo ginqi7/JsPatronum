@@ -13,15 +13,17 @@ import org.mozilla.javascript.ast.NodeVisitor;
 public class ImmediatelyInvokedFunction {
     public static void addParamsAndArguments(AstRoot root, final List<AstNode> params, final List<AstNode> arguments) {
         root.visit(new NodeVisitor() {
+                boolean flag = true;
                 @Override
                 public boolean visit(AstNode astNode) {
-                    if (astNode.getClass() == FunctionCall.class) {
+                    if (astNode.getClass() == FunctionCall.class && this.flag) {
                         FunctionCall functionCall = (FunctionCall) astNode;
                         functionCall.setArguments(arguments);
+                        this.flag = false;
                     } else if (astNode.getClass() == FunctionNode.class) {
                         FunctionNode functionNode = (FunctionNode) astNode;
                         functionNode.setParams(params);
-
+                        return false;
                     }
                     return true;
                 }

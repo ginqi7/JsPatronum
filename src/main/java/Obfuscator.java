@@ -1,7 +1,6 @@
 package main.java;
 
 import org.mozilla.javascript.CompilerEnvirons;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.*;
@@ -9,7 +8,6 @@ import org.mozilla.javascript.ast.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Obfuscator {
@@ -98,7 +96,6 @@ public class Obfuscator {
         this.astRoot.visit(visitorTopFunction);
         VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
         this.astRoot.visit(visitorStringToArray);
-        this.astRoot.toSource();
     }
 
     public void obfuscate() {

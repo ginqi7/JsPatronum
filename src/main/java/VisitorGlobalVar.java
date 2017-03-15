@@ -43,7 +43,6 @@ public class VisitorGlobalVar implements NodeVisitor {
         assignment.setOperator(Token.ASSIGN);
         expressionStatement.setExpression(assignment);
         parentNode.replaceChild(variableDeclaration, expressionStatement);
-
     }
 
     private void elementGetToProperty(ElementGet elementGet, Name name) {
