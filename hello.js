@@ -1,5 +1,1 @@
-var a = {};
-a["hello"] = 10;
-console.log(a["hello"]);
-
-function () {}
+var hello = 100;

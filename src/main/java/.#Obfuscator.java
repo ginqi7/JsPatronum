@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Obfuscator {
     private AstRoot astRoot;
@@ -29,8 +28,11 @@ public class Obfuscator {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
-                    String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
-                    System.out.format(indent, "").println(astNode.getClass());
+                    // String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
+                    // System.out.format(indent, "").println(astNode.getClass());
+                    if (astNode.getClass() == FunctionCall.class) {
+                        FunctionCall functionCall = (FunctionCall) astNode;
+                    }
                     return true;
                 }
             });

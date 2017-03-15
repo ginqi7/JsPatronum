@@ -37,7 +37,7 @@ public class VisitorTopFunction implements NodeVisitor {
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == AstRoot.class) {
             AstRoot astRoot = this.addToTopFunction((AstRoot) astNode);
-			this.changeRoot((AstRoot) astNode, astRoot);
+            this.changeRoot((AstRoot) astNode, astRoot);
         }
         return false;
     }

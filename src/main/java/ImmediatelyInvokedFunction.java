@@ -21,6 +21,7 @@ public class ImmediatelyInvokedFunction {
                     } else if (astNode.getClass() == FunctionNode.class) {
                         FunctionNode functionNode = (FunctionNode) astNode;
                         functionNode.setParams(params);
+
                     }
                     return true;
                 }
