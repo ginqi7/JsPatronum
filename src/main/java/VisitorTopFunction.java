@@ -19,7 +19,7 @@ public class VisitorTopFunction implements NodeVisitor {
     
     private AstRoot addToTopFunction(AstRoot astRoot) {
         String string = "! function() {}()";
-        AstRoot root = ImmediatelyInvokedFunction.createImmediatelyInvokedFunction(string);
+        AstRoot root = ImmediatelyInvokedFunction.createImmediatelyInvokedFunction(string); 
         ImmediatelyInvokedFunction.addParamsAndArguments(root, this.params, this.arguments);
         ImmediatelyInvokedFunction.addFunctionBody(root, astRoot);
         return root;

@@ -8,7 +8,6 @@ import org.mozilla.javascript.ast.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.List;
 
 public class Obfuscator {
     private AstRoot astRoot;

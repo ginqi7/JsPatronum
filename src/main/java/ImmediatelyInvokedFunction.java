@@ -38,17 +38,18 @@ public class ImmediatelyInvokedFunction {
     public static void addFunctionBody(AstRoot root, AstRoot astRoot) {
         final List<AstNode> statements = astRoot.getStatements();
         root.visit(new NodeVisitor() {
-                    @Override
-                    public boolean visit(AstNode astNode) {
-                        if (astNode.getClass() == Block.class) {
-                            for (AstNode statement : statements) {
-                                astNode.addChild(statement);
-                            }
-                            return false;
+                private boolean flag = true;
+                @Override
+                public boolean visit(AstNode astNode) {
+                    if (astNode.getClass() == Block.class && flag) {
+                        for (AstNode statement : statements) {
+                            astNode.addChild(statement);
                         }
-                        return true;
+                        flag = false;
+                        return false;
                     }
-
+                    return true;
+                }
             });
 	}
 }

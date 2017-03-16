@@ -3,7 +3,6 @@ package main.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mozilla.javascript.Node;
 import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
@@ -13,6 +12,8 @@ import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.UnaryExpression;
+
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
 public class VisitorStringToArray implements NodeVisitor {
 
@@ -72,6 +73,33 @@ public class VisitorStringToArray implements NodeVisitor {
 		List<AstNode> arguments = this.createArguments(astRoot);
         VisitorTopFunction visitorTopFunction = new VisitorTopFunction(params, arguments);
         astRoot.visit(visitorTopFunction);
+		this.changeLowArguments(astRoot);
+    }
+
+    private void changeLowArguments(AstRoot astRoot) {
+        astRoot.visit(new NodeVisitor() {
+                private int functionCallNum = 0;
+                private ArrayLiteral arrayLiteral;
+                @Override
+                public boolean visit(AstNode astNode) {
+                    if (astNode.getClass() == FunctionCall.class) {
+                        FunctionCall functionCall = (FunctionCall) astNode;
+                        functionCallNum += 1;
+                        if (functionCallNum == 1) {
+                            arrayLiteral = (ArrayLiteral) functionCall.getArguments().get(0);
+                        } else if (functionCallNum == 2) {
+                            List<AstNode> arguments = functionCall.getArguments();
+                            for (int i = 0; i < arguments.size(); i++) {
+                                AstNode argument = this.createNewArgument(arguments.get(i));
+                            }
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+                
+            });
     }
 
     private List<AstNode> createLowArguments(AstRoot astRoot) {
@@ -113,7 +141,7 @@ public class VisitorStringToArray implements NodeVisitor {
 	@Override
     public boolean visit(AstNode astNode) {
 		if (astNode.getClass() == AstRoot.class) {
-            this.stringToArray((AstRoot) astNode);
+			this.stringToArray((AstRoot) astNode);
 		}
 		return false;
 	}
