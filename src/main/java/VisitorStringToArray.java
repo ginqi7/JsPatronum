@@ -8,12 +8,11 @@ import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
+import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.UnaryExpression;
-
-import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
 public class VisitorStringToArray implements NodeVisitor {
 
@@ -79,6 +78,8 @@ public class VisitorStringToArray implements NodeVisitor {
     private void changeLowArguments(AstRoot astRoot) {
         astRoot.visit(new NodeVisitor() {
                 private int functionCallNum = 0;
+                private int functionNodeNum = 0;
+                private Name name;
                 private ArrayLiteral arrayLiteral;
                 @Override
                 public boolean visit(AstNode astNode) {
@@ -86,21 +87,38 @@ public class VisitorStringToArray implements NodeVisitor {
                         FunctionCall functionCall = (FunctionCall) astNode;
                         functionCallNum += 1;
                         if (functionCallNum == 1) {
-                            arrayLiteral = (ArrayLiteral) functionCall.getArguments().get(0);
+                            FunctionCall subFunctionCall = (FunctionCall) functionCall.getArguments().get(0); 
+                            arrayLiteral = (ArrayLiteral) subFunctionCall.getArguments().get(0);
                         } else if (functionCallNum == 2) {
-                            List<AstNode> arguments = functionCall.getArguments();
-                            for (int i = 0; i < arguments.size(); i++) {
-                                AstNode argument = this.createNewArgument(arguments.get(i));
-                            }
-                            return false;
+                            List<AstNode> oldArguments = functionCall.getArguments();
+                            List<AstNode> newArguments = this.createNewArguments(oldArguments);
+                            functionCall.setArguments(newArguments);
+                        }
+                    } else if (astNode.getClass() == FunctionNode.class) {
+                        FunctionNode functionNode = (FunctionNode) astNode;
+                        functionNodeNum += 1;
+                        if (functionNodeNum == 1) {
+                            this.name = (Name) functionNode.getParams().get(0);
                         }
                     }
                     return true;
                 }
 
-                
+                private List<AstNode> createNewArguments(List<AstNode> oldArguments) {
+                    List<AstNode> newArguments = new ArrayList<AstNode>();
+                    FunctionCall functionCall = new FunctionCall();
+                    functionCall.setTarget(this.name);
+                    for (AstNode oldArgument : oldArguments) {
+                        if (oldArgument.getClass() == StringLiteral.class) {
+                        }
+                        else {
+                            newArguments.add(oldArgument);
+                        }
+                    }
+                    return newArguments;
+                }
             });
-    }
+	}
 
     private List<AstNode> createLowArguments(AstRoot astRoot) {
         VisitorCreateArguments visitorCreateArguments = new VisitorCreateArguments();
