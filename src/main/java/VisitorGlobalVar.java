@@ -18,6 +18,11 @@ import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
 
+/**
+ *
+ * 全局变量转换为this属性
+ * @author
+ */
 public class VisitorGlobalVar implements NodeVisitor {
 
     private boolean isGlobalVar(Name name) {

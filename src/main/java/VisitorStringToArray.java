@@ -2,7 +2,6 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstNode;
@@ -16,8 +15,16 @@ import org.mozilla.javascript.ast.NumberLiteral;
 import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.UnaryExpression;
 
+/**
+ *
+ * 遍历 AST 树将字符串实参转换为字符数组
+ * @author
+ */
 public class VisitorStringToArray implements NodeVisitor {
 
+	/**
+	 * 创造最外层 FunctionCall 的参数
+	 */
     private class VisitorCreateArguments implements NodeVisitor {
         private List<AstNode> arguments;
 
@@ -68,15 +75,23 @@ public class VisitorStringToArray implements NodeVisitor {
 			return this.randomArrayArguments();
 		}
 
+		/**
+		 *
+		 * 将字符数组打乱
+		 * @return 返回新的字符数组参数
+		 */
 		private List<AstNode> randomArrayArguments() {
+            List<AstNode> arguments = new ArrayList<AstNode>();
             ArrayLiteral arrayLiteral = (ArrayLiteral) this.arguments.get(0);
             List<AstNode> astNodes = arrayLiteral.getElements();
             for (int i = 0; i < astNodes.size(); i++) {
                 int randomNum = (int)(Math.random()*astNodes.size());
                 AstNode tmpNode = astNodes.get(randomNum);
-                
+                astNodes.set(randomNum, astNodes.get(i));
+                astNodes.set(i, tmpNode);
             }
-            return null;
+            arguments.add(arrayLiteral);
+            return arguments;
 		}
     }
     
@@ -88,6 +103,11 @@ public class VisitorStringToArray implements NodeVisitor {
 		this.changeLowArguments(astRoot);
     }
 
+	/**
+	 *
+	 * 内层 FunctionCall 的实参转换为函数调用
+	 * @param astRoot
+	 */
     private void changeLowArguments(AstRoot astRoot) {
         astRoot.visit(new NodeVisitor() {
                 private int functionCallNum = 0;
@@ -100,7 +120,8 @@ public class VisitorStringToArray implements NodeVisitor {
                         FunctionCall functionCall = (FunctionCall) astNode;
                         functionCallNum += 1;
                         if (functionCallNum == 1) {
-                            FunctionCall subFunctionCall = (FunctionCall) functionCall.getArguments().get(0); 
+                            FunctionCall subFunctionCall = (FunctionCall) functionCall.getArguments().get(0);
+                            System.out.println(subFunctionCall.getArguments().getClass());
                             arrayLiteral = (ArrayLiteral) subFunctionCall.getArguments().get(0);
                         } else if (functionCallNum == 2) {
                             List<AstNode> oldArguments = functionCall.getArguments();

@@ -11,6 +11,11 @@ import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.PropertyGet;
 import org.mozilla.javascript.ast.StringLiteral;
 
+/**
+ *
+ * 对象属性转换为对象元素
+ * @author
+ */
 public class VisitorPropertyToElement implements NodeVisitor {
 
     private ElementGet createElementGet(PropertyGet propertyGet) {

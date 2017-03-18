@@ -1,8 +1,6 @@
 package main.java;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.mozilla.javascript.ast.AstNode;
@@ -11,6 +9,11 @@ import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.Scope;
 
+/**
+ *
+ * 局部变量重命名
+ * @author
+ */
 public class VisitorLocalVar implements NodeVisitor {
 
     private int number = 0;

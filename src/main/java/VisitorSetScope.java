@@ -11,6 +11,11 @@ import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.ScriptNode;
 import org.mozilla.javascript.ast.Symbol;
 
+/**
+ *
+ * 设置所有变量的作用域
+ * @author
+ */
 public class VisitorSetScope implements NodeVisitor {
 
     private boolean symbolsHasName(List<Symbol> symbols, Name name) {

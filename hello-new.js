@@ -1,12 +1,12 @@
-!function(c) {
-  !function(W, P, a, H, C) {
-  W[P] = a;
-  W[H][C](W[P]);
-}(this, c(0, 1, 2, 2, 3), c(4, 5, 6, 7), c(6, 3, 8, 9, 3, 2, 1), c(2, 3, 10));
-}(function(Y) {
+!function(v) {
+  !function(l, t, h, J, X) {
+  l[t] = h;
+  l[J][X](l[t]);
+}(this, v(4, 5, 6, 6, 1), v(0, 7, 10, 8), v(10, 1, 9, 2, 1, 6, 5), v(6, 1, 3));
+}(function(M) {
   return function() {
-  for (var c = arguments, W = "", C = 0, K = c.length; K > C; C++) 
-    W += Y[c[C]];
-  return W;
+  for (var j = arguments, e = "", x = 0, z = j.length; z > x; x++) 
+    e += M[j[x]];
+  return e;
 };
-}(["h", "e", "l", "o", "f", "u", "c", "k", "n", "s", "g"]));
+}(["f", "o", "s", "g", "h", "e", "l", "u", "k", "n", "c"]));

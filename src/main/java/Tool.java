@@ -1,10 +1,15 @@
 package main.java;
 
+/**
+ *
+ * 工具函数
+ * @author
+ */
 public class Tool {
     
 	/**
 	 * 
-	 *
+	 * 判断一个数是十进制几位数
 	 * @param nums
 	 * @return
 	 */
@@ -18,6 +23,12 @@ public class Tool {
         return length;
     }
 
+	/**
+	 *
+	 * 随机生成一个变量名字符串
+	 * @param nums
+	 * @return
+	 */
     public static String getRandomName(int nums) {
         int len = (int)Math.ceil(Math.random()*nums);
         if (len > 0) {

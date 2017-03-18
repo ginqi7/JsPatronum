@@ -9,13 +9,18 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+/**
+ *
+ * 代码混淆器的主要功能类
+ * @author
+ */
 public class Obfuscator {
     private AstRoot astRoot;
     private CompilerEnvirons compilerEnvirons = new CompilerEnvirons();
     private ErrorReporter errorReporter;
     
 	/**
-	 * 代码混淆器的主要功能类
+	 * 
 	 * 
 	 * @param in 待混淆的代码
 	 * @param errorReporter 记录代码的 error

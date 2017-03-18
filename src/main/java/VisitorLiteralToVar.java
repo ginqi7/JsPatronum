@@ -6,13 +6,17 @@ import java.util.List;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ElementGet;
-import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.StringLiteral;
 
+/**
+ *
+ * 字面量转换为函数参数
+ * @author
+ */
 public class VisitorLiteralToVar implements NodeVisitor {
     private List<AstNode> params = new ArrayList<AstNode>();
     private List<AstNode> arguments = new ArrayList<AstNode>();
