@@ -7,6 +7,11 @@ import java.io.*;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
+/**
+ *
+ * 代码混淆器的入口类
+ * @author Gin
+ */
 public class JsPatronum {
     public static void main(String args[]) {
         // 命令行输入处理

@@ -1,11 +1,15 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.ExpressionStatement;
+import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
@@ -67,10 +71,19 @@ public class VisitorGlobalVar implements NodeVisitor {
             this.infixExpressionToProperty((InfixExpression) parentNode, name);
         } else if (parentNode.getClass() == ElementGet.class) {
 			this.elementGetToProperty((ElementGet) parentNode, name);
-        }
+        } else if (parentNode.getClass() == FunctionCall.class) {
+			this.functionCallToProperty((FunctionCall) parentNode, name);
+		}
+	}
+
+	private void functionCallToProperty(FunctionCall functionCall, Name name) {
+        List<AstNode> arguments = new ArrayList<AstNode>();
+        PropertyGet propertyGet = this.createPropertyGet(name);
+        arguments.add(propertyGet);
+        functionCall.setArguments(arguments);
     }
-    
-    @Override
+
+	@Override
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == Name.class) {
             Name name = (Name)astNode;

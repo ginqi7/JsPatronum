@@ -13,75 +13,50 @@ public class Obfuscator {
     private AstRoot astRoot;
     private CompilerEnvirons compilerEnvirons = new CompilerEnvirons();
     private ErrorReporter errorReporter;
+    
+	/**
+	 * 代码混淆器的主要功能类
+	 * 
+	 * @param in 待混淆的代码
+	 * @param errorReporter 记录代码的 error
+	 *
+	 * @throws IOException
+	 */
     public Obfuscator(Reader in, ErrorReporter errorReporter) throws IOException {
         this.errorReporter = errorReporter;
         this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(in, null, 1);
     }
 
+	/**
+	 *
+	 * 刷新修改后的语法树
+	 */
     private void freshAST() {
         this.astRoot = new Parser(this.compilerEnvirons, this.errorReporter).parse(this.astRoot.toSource(), null, 1);
     }
 
+	/**
+	 *
+	 * 打印语法树信息
+	 */
     private void printAst() {
         this.astRoot.visit(new NodeVisitor() {
                 @Override
                 public boolean visit(AstNode astNode) {
                     String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
                     System.out.format(indent, "").println(astNode.getClass());
+                    if (astNode.getParent() != null) {
+                        System.out.println(astNode.getParent().getClass());
+                    }
                     return true;
                 }
             });
     }
 
-    private void globalVarToLocalVar() {
-        this.freshAST(); 
-        VisitorCreateTopFunction visitorCreateTopFunction = new VisitorCreateTopFunction();
-        this.astRoot.visit(visitorCreateTopFunction);
-        VisitorGlobalToLocal visitorGlobalToLocal = new VisitorGlobalToLocal(visitorCreateTopFunction.getParamMap(), visitorCreateTopFunction.getThisName());
-        this.freshAST();
-        this.astRoot.visit(visitorGlobalToLocal);
-    }
-
-    private void renameVar() {
-        freshAST();
-        VisitorSetScope visitorSetScope = new VisitorSetScope();
-        this.astRoot.visit(visitorSetScope);
-        VisitorRename visitorRename = new VisitorRename(this.astRoot);
-		ExpressionStatement expressionStatement = (ExpressionStatement) this.astRoot.getFirstChild();
-		FunctionCall functionCall = (FunctionCall) expressionStatement.getExpression();
-		ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) functionCall.getTarget();
-		FunctionNode functionNode = (FunctionNode) parenthesizedExpression.getExpression();
-        functionNode.visit(visitorRename);
-    }
-
-    private void changeNumber() {
-        freshAST();
-        VisitorChangeNumber visitorChangeNumber = new VisitorChangeNumber();
-        this.astRoot.visit(visitorChangeNumber);
-    }
-
-    private void stringLiteralToGloableVar() {
-        freshAST();
-        ExpressionStatement expressionStatement = (ExpressionStatement) this.astRoot.getFirstChild();
-        FunctionCall functionCall = (FunctionCall) expressionStatement.getExpression();
-        ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression) functionCall.getTarget();
-        FunctionNode functionNode = (FunctionNode) parenthesizedExpression.getExpression();
-        VisitorStringLiteral visitorStringLiteral = new VisitorStringLiteral(functionCall, functionNode);
-        functionNode.visit(visitorStringLiteral);
-    }
-
-    private void propertyToElement() {
-        this.freshAST();
-        VisitorPropertyToElement visitorPropertyToElement = new VisitorPropertyToElement();
-        this.astRoot.visit(visitorPropertyToElement);
-    }
-
-    private void stringToArray() {
-        this.freshAST();
-        VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
-        this.astRoot.visit(visitorStringToArray);
-    }
-
+	/**
+	 *
+	 * 测试各个类是否正常执行
+	 */
     private void Test() {
         VisitorSetScope visitorSetScope = new VisitorSetScope();
         this.astRoot.visit(visitorSetScope);
@@ -95,8 +70,16 @@ public class Obfuscator {
         this.astRoot.visit(visitorTopFunction);
         VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
         this.astRoot.visit(visitorStringToArray);
+        freshAST();
+        this.astRoot.visit(visitorSetScope);
+        VisitorLocalVar visitorLocalVar = new VisitorLocalVar();
+        this.astRoot.visit(visitorLocalVar);
     }
 
+	/**
+	 *
+	 * 对外接口，执行混淆操作
+	 */
     public void obfuscate() {
         this.printAst();
         // this.globalVarToLocalVar();
@@ -108,8 +91,16 @@ public class Obfuscator {
         this.Test();
     }
 
+	/**
+	 *
+	 * 对外接口，执行压缩操作。
+     * 生成混淆后的代码写到新文件中。
+	 * @param out
+	 *
+	 * @throws IOException
+	 */
     public void compress(Writer out) throws IOException {
-        //        this.freshAST();
+        // this.freshAST();
         // boolean isString = false;
         // String source = this.astRoot.toSource();
         // StringBuffer compressedBuffer = new StringBuffer();

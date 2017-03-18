@@ -1,6 +1,13 @@
 package main.java;
 
 public class Tool {
+    
+	/**
+	 * 
+	 *
+	 * @param nums
+	 * @return
+	 */
     public static int lengthOfVar(int nums) {
         int length = 1;
         int sum = Build_in.firstChar; 

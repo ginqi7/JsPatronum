@@ -2,6 +2,7 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstNode;
@@ -11,6 +12,7 @@ import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.NumberLiteral;
 import org.mozilla.javascript.ast.StringLiteral;
 import org.mozilla.javascript.ast.UnaryExpression;
 
@@ -63,7 +65,18 @@ public class VisitorStringToArray implements NodeVisitor {
 		 * @return the arguments
 		 */
 		public List<AstNode> getArguments() {
-			return arguments;
+			return this.randomArrayArguments();
+		}
+
+		private List<AstNode> randomArrayArguments() {
+            ArrayLiteral arrayLiteral = (ArrayLiteral) this.arguments.get(0);
+            List<AstNode> astNodes = arrayLiteral.getElements();
+            for (int i = 0; i < astNodes.size(); i++) {
+                int randomNum = (int)(Math.random()*astNodes.size());
+                AstNode tmpNode = astNodes.get(randomNum);
+                
+            }
+            return null;
 		}
     }
     
@@ -106,16 +119,48 @@ public class VisitorStringToArray implements NodeVisitor {
 
                 private List<AstNode> createNewArguments(List<AstNode> oldArguments) {
                     List<AstNode> newArguments = new ArrayList<AstNode>();
-                    FunctionCall functionCall = new FunctionCall();
-                    functionCall.setTarget(this.name);
                     for (AstNode oldArgument : oldArguments) {
                         if (oldArgument.getClass() == StringLiteral.class) {
-                        }
-                        else {
+                            newArguments.add(this.oldToNewArgument((StringLiteral) oldArgument));
+                        } else {
                             newArguments.add(oldArgument);
                         }
                     }
                     return newArguments;
+                }
+
+                private AstNode oldToNewArgument(StringLiteral oldArgument) {
+                    FunctionCall functionCall = new FunctionCall();
+                    functionCall.setTarget(this.name);
+                    List<AstNode> numArguments = this.createNumArguments(oldArgument);
+                    functionCall.setArguments(numArguments);
+                    return functionCall;
+                }
+
+                private List<AstNode> createNumArguments(StringLiteral oldArgument) {
+                    List<AstNode> numArguments = new ArrayList<AstNode>();
+                    String oldArgumentString = oldArgument.getValue();
+                    List<AstNode> charNodes = this.arrayLiteral.getElements();
+                    for (int i = 0; i < oldArgumentString.length(); i++) {
+                        String charString = oldArgumentString.charAt(i) + "";
+                        int index = this.indexOfCharNodes(charNodes, charString);
+                        if (index != -1) {
+                            NumberLiteral numberLiteral = new NumberLiteral();
+                            numberLiteral.setValue(index + "");
+                            numArguments.add(numberLiteral);
+                        }
+                    }
+                    return numArguments;
+                }
+
+                private int indexOfCharNodes(List<AstNode> charNodes, String charString) {
+                    for (int i = 0; i < charNodes.size(); i++) {
+                        StringLiteral stringLiteral = (StringLiteral) charNodes.get(i);
+                        if (stringLiteral.getValue().equals(charString)) {
+                            return i;
+                        }
+                    }
+                    return -1;
                 }
             });
 	}
@@ -137,7 +182,6 @@ public class VisitorStringToArray implements NodeVisitor {
         ImmediatelyInvokedFunction.addParamsAndArguments(root, this.createParams(), this.createLowArguments(astRoot));
         FunctionCall functionCall = this.getFunctionCall(root);
         arguments.add(functionCall);
-        System.out.println(functionCall.toSource());
         return arguments;
 	}
 

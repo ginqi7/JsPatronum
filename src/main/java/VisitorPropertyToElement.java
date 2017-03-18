@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.FunctionCall;
@@ -37,7 +40,14 @@ public class VisitorPropertyToElement implements NodeVisitor {
 
     private void functionCallToElement(FunctionCall functionCall, PropertyGet propertyGet) {
         ElementGet elementGet = this.createElementGet(propertyGet);
-        functionCall.setTarget(elementGet);
+        if (functionCall.getTarget() == propertyGet) {
+            functionCall.setTarget(elementGet);
+        } else {
+            List<AstNode> arguments = new ArrayList<AstNode>();
+            arguments.add(elementGet);
+            functionCall.setArguments(arguments);
+        }
+
     }
 
     private void propertyToElement(PropertyGet propertyGet) {

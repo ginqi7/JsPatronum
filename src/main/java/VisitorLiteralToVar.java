@@ -6,6 +6,7 @@ import java.util.List;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.ElementGet;
+import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
@@ -74,10 +75,9 @@ public class VisitorLiteralToVar implements NodeVisitor {
         } else if (parentNode.getClass() == ElementGet.class) {
             this.elementGetToVar((ElementGet) parentNode, astNode, name);
         }
+	}
 
-    }
-
-    private boolean isThisKeyword(AstNode astNode) {
+	private boolean isThisKeyword(AstNode astNode) {
         if (astNode.getClass() == KeywordLiteral.class &&
             ((KeywordLiteral) astNode).getType() == Token.THIS) {
             return true;
