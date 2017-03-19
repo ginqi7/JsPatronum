@@ -62,7 +62,7 @@ public class VisitorPropertyToElement implements NodeVisitor {
         } else if (parentNode.getClass() == ElementGet.class) {
 			this.elementGetToElement((ElementGet) parentNode, propertyGet);
         } else if (parentNode.getClass() == FunctionCall.class) {
-			this.functionCallToElement((FunctionCall) parentNode, propertyGet);
+            this.functionCallToElement((FunctionCall) parentNode, propertyGet);
         }
     }
     

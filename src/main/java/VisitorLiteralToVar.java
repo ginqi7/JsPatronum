@@ -91,6 +91,10 @@ public class VisitorLiteralToVar implements NodeVisitor {
         
     @Override
     public boolean visit(AstNode astNode) {
+        if (astNode.getClass() == StringLiteral.class) {
+            StringLiteral stringLiteral = (StringLiteral) astNode;
+            stringLiteral.setQuoteCharacter('\"');
+        }
         if (astNode.getClass() == StringLiteral.class || isThisKeyword(astNode)) {
             this.literalToVar(astNode);
         }

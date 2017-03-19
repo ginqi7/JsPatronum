@@ -36,7 +36,6 @@ public class VisitorLocalVar implements NodeVisitor {
         if (this.scopeNamesMap.containsKey(scope)) {
             Map<String, String> nameMap = this.scopeNamesMap.get(scope);
             if (!nameMap.containsKey(name.getIdentifier())) {
-                System.out.println(this.number);
                 nameMap.put(name.getIdentifier(), Tool.getRandomName(Tool.lengthOfVar(this.number)));
             }
             name.setIdentifier(nameMap.get(name.getIdentifier()));

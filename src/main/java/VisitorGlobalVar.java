@@ -10,6 +10,7 @@ import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
+import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
@@ -78,24 +79,53 @@ public class VisitorGlobalVar implements NodeVisitor {
 			this.elementGetToProperty((ElementGet) parentNode, name);
         } else if (parentNode.getClass() == FunctionCall.class) {
 			this.functionCallToProperty((FunctionCall) parentNode, name);
+		} else if (parentNode.getClass() == FunctionNode.class) {
+			this.functionNodeToProperty((FunctionNode) parentNode, name);
 		}
 	}
 
-	private void functionCallToProperty(FunctionCall functionCall, Name name) {
-        List<AstNode> arguments = new ArrayList<AstNode>();
-        PropertyGet propertyGet = this.createPropertyGet(name);
-        arguments.add(propertyGet);
-        functionCall.setArguments(arguments);
+	private void functionNodeToProperty(FunctionNode functionNode, Name name) {
+        AstNode parentNode = functionNode.getParent();
+        if (parentNode.getClass() == AstRoot.class) {
+            AstRoot astRoot = (AstRoot) parentNode;
+            ExpressionStatement expressionStatement = new ExpressionStatement();
+            Assignment assignment = new Assignment();
+            PropertyGet propertyGet = new PropertyGet();
+            KeywordLiteral keywordLiteral = new KeywordLiteral();
+            keywordLiteral.setType(Token.THIS);
+            propertyGet.setTarget(keywordLiteral);
+            propertyGet.setProperty(name);
+            System.out.println(propertyGet.toSource());
+            System.out.println(functionNode.toSource());
+            functionNode.setFunctionName(null);
+            assignment.setLeft(propertyGet);
+            assignment.setRight(functionNode);
+            assignment.setOperator(Token.ASSIGN);
+            expressionStatement.setExpression(assignment);
+            astRoot.replaceChild(functionNode, expressionStatement);
+        }
+        
     }
 
-	@Override
-    public boolean visit(AstNode astNode) {
-        if (astNode.getClass() == Name.class) {
-            Name name = (Name)astNode;
-            if (isGlobalVar(name)) {
-                globalToProperty(name);
-            }
+    private void functionCallToProperty(FunctionCall functionCall, Name name) {
+        List<AstNode> arguments = new ArrayList<AstNode>();
+        PropertyGet propertyGet = this.createPropertyGet(name);
+        if (functionCall.getTarget() == name) {
+            functionCall.setTarget(propertyGet);
+        } else {
+            arguments.add(propertyGet);
+            functionCall.setArguments(arguments);
         }
-        return true;
     }
+
+        @Override
+            public boolean visit(AstNode astNode) {
+            if (astNode.getClass() == Name.class) {
+                Name name = (Name)astNode;
+                if (isGlobalVar(name)) {
+                    globalToProperty(name);
+                }
+            }
+            return true;
+        }
 }

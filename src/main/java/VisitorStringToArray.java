@@ -121,7 +121,6 @@ public class VisitorStringToArray implements NodeVisitor {
                         functionCallNum += 1;
                         if (functionCallNum == 1) {
                             FunctionCall subFunctionCall = (FunctionCall) functionCall.getArguments().get(0);
-                            System.out.println(subFunctionCall.getArguments().getClass());
                             arrayLiteral = (ArrayLiteral) subFunctionCall.getArguments().get(0);
                         } else if (functionCallNum == 2) {
                             List<AstNode> oldArguments = functionCall.getArguments();

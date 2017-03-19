@@ -50,9 +50,6 @@ public class Obfuscator {
                 public boolean visit(AstNode astNode) {
                     String indent = "%1$Xs".replace("X", String.valueOf(astNode.depth() + 1));
                     System.out.format(indent, "").println(astNode.getClass());
-                    if (astNode.getParent() != null) {
-                        System.out.println(astNode.getParent().getClass());
-                    }
                     return true;
                 }
             });
@@ -79,6 +76,8 @@ public class Obfuscator {
         this.astRoot.visit(visitorSetScope);
         VisitorLocalVar visitorLocalVar = new VisitorLocalVar();
         this.astRoot.visit(visitorLocalVar);
+        VisitorConstant visitorConstant = new VisitorConstant();
+        this.astRoot.visit(visitorConstant);
     }
 
 	/**
@@ -86,7 +85,7 @@ public class Obfuscator {
 	 * 对外接口，执行混淆操作
 	 */
     public void obfuscate() {
-        this.printAst();
+        this.printAst(); 
         // this.globalVarToLocalVar();
         // this.propertyToElement();
         // this.stringLiteralToGloableVar();
@@ -127,7 +126,6 @@ public class Obfuscator {
         //     }
         // }
         // out.write(compressedBuffer.toString());
-        out.write(this.astRoot.toSource());
-
+        out.write(new StringHack().escapedCharacters(this.astRoot.toSource()));
     }
 }
