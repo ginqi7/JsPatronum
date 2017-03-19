@@ -1,6 +1,8 @@
 package main.java;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mozilla.javascript.ast.AstNode;
@@ -17,6 +19,7 @@ import org.mozilla.javascript.ast.Scope;
 public class VisitorLocalVar implements NodeVisitor {
 
     private int number = 0;
+    List<String> names = new ArrayList<String>();
     private Map<Scope, Map<String, String>> scopeNamesMap = new HashMap<Scope, Map<String, String>>();
         
     @Override
@@ -36,7 +39,12 @@ public class VisitorLocalVar implements NodeVisitor {
         if (this.scopeNamesMap.containsKey(scope)) {
             Map<String, String> nameMap = this.scopeNamesMap.get(scope);
             if (!nameMap.containsKey(name.getIdentifier())) {
-                nameMap.put(name.getIdentifier(), Tool.getRandomName(Tool.lengthOfVar(this.number)));
+                String newName = Tool.getRandomName(Tool.lengthOfVar(this.number));
+                while (names.contains(newName)) {
+                    newName = Tool.getRandomName(Tool.lengthOfVar(this.number));
+                }
+                names.add(newName);
+                nameMap.put(name.getIdentifier(), newName);
             }
             name.setIdentifier(nameMap.get(name.getIdentifier()));
         }
