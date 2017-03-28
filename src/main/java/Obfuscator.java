@@ -86,12 +86,6 @@ public class Obfuscator {
 	 */
     public void obfuscate() {
         this.printAst(); 
-        // this.globalVarToLocalVar();
-        // this.propertyToElement();
-        // this.stringLiteralToGloableVar();
-        // this.stringToArray();
-        // this.renameVar();
-        // this.changeNumber();
         this.Test();
     }
 
@@ -104,28 +98,38 @@ public class Obfuscator {
 	 * @throws IOException
 	 */
     public void compress(Writer out) throws IOException {
-        // this.freshAST();
-        // boolean isString = false;
-        // String source = this.astRoot.toSource();
-        // StringBuffer compressedBuffer = new StringBuffer();
-        // String[] sources = source.split(" |\n");
-        // for (String word : sources) {
-        //     String[] split = word.split("\"");
-        //     //System.out.println(split.length);
-        //     if (!word.isEmpty()) {
-        //         compressedBuffer.append(word);
-        //         if (!isString &&
-        //             split.length % 2 == 0) {
-        //             isString = true;
-        //         } else if (split.length % 2 == 0) {
-        //             isString = false;
-        //         }
-        //     }
-        //     if (isString) {
-        //         compressedBuffer.append(" ");
-        //     }
-        // }
-        // out.write(compressedBuffer.toString());
-        out.write(new StringHack().escapedCharacters(this.astRoot.toSource()));
+        String source = this.astRoot.toSource();
+        String string = this.removeBlankCharacter(source); 
+        out.write(new StringHack().escapedCharacters(string));
+        // out.write(new StringHack().escapedCharacters(this.astRoot.toSource()));
+    }
+    
+    String removeBlankCharacter(String source) {
+        boolean isString = false;
+        StringBuffer compressedBuffer = new StringBuffer();
+        String[] sources = source.split(" |\n");
+        for (String word : sources) {
+            String[] split = word.split("\"");
+            if (!word.isEmpty()) {
+                compressedBuffer.append(word);
+                if (!isString &&
+                    split.length % 2 == 0) {
+                    isString = true;
+                } else if (split.length % 2 == 0) {
+                    isString = false;
+                }
+            }
+            if (isString) {
+                compressedBuffer.append(" ");
+            }
+            if (word.equals("var") ||
+                word.equals("(var") ||
+                word.equals("continue") ||
+                word.equals("return") ||
+                word.equals("else")) {
+                compressedBuffer.append(" ");
+            }
+        }
+        return compressedBuffer.toString();
     }
 }

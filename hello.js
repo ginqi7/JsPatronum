@@ -1,6 +1,6 @@
 function NQueens(order) {
     if (order < 4) {
-        console.log('N Queens problem apply for order bigger than 3 ! ');
+        console.log("N Queens problem apply for order bigger than 3 ! ");
         return;
     }
 
@@ -10,7 +10,7 @@ function NQueens(order) {
     for (var row=0; row<order; row++) {
         //若出现row小于0, 则说明问题无解
         if(row < 0){
-            console.log('This N Queens problem has no solution ! ');
+            console.log("This N Queens problem has no solution ! ");
             break;
         }
         //第一次检测到新的一行
