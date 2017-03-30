@@ -1,0 +1,5 @@
+\begin{block}{hello}
+\begin{minted}{js}
+  int i = 10;
+\end{minted}
+\end{block}

@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kd}{unction}\PYG{p}{(}\PYG{n+nx}{Gin}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+\PYG{o}{!}\PYG{k+kd}{function}\PYG{p}{(}\PYG{n+nx}{gin1}\PYG{p}{,} \PYG{n+nx}{gin2}\PYG{p}{,} \PYG{n+nx}{gin3}\PYG{p}{,} \PYG{n+nx}{gin4}\PYG{p}{,} \PYG{n+nx}{gin5}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+\PYG{n+nx}{gin1}\PYG{p}{[}\PYG{n+nx}{gin2}\PYG{p}{]} \PYG{o}{=} \PYG{n+nx}{gin1}\PYG{p}{[}\PYG{n+nx}{gin3}\PYG{p}{][}\PYG{n+nx}{gin4}\PYG{p}{](}\PYG{n+nx}{gin5}\PYG{p}{);}
+\PYG{k}{this}\PYG{p}{,} \PYG{n+nx}{Gin}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{),}
+\PYG{n+nx}{n}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{),}
+\PYG{n+nx}{n}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{),}
+\PYG{n+nx}{n}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{9}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{11}\PYG{p}{));}
+\PYG{k+kd}{function}\PYG{p}{(}\PYG{n+nx}{Gin}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+\PYG{k}{return} \PYG{k+kd}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+\PYG{k}{for} \PYG{p}{(}\PYG{k+kd}{var} \PYG{n+nx}{t} \PYG{o}{=} \PYG{n+nx}{arguments}\PYG{p}{,} \PYG{n+nx}{r} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{,} \PYG{n+nx}{u} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nx}{i} \PYG{o}{=} \PYG{n+nx}{t}\PYG{p}{.}\PYG{n+nx}{length}\PYG{p}{;} \PYG{n+nx}{i} \PYG{o}{\PYGZgt{}} \PYG{n+nx}{u}\PYG{p}{;} \PYG{n+nx}{u}\PYG{o}{++}\PYG{p}{)}
+  \PYG{n+nx}{r} \PYG{o}{+=} \PYG{n+nx}{Gin}\PYG{p}{[}\PYG{n+nx}{t}\PYG{p}{[}\PYG{n+nx}{u}\PYG{p}{]];}
+\PYG{k}{return} \PYG{n+nx}{r}\PYG{p}{;}
+
+\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}s\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}e\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}l\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}h\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}w\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}n\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}o\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}g\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}c\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}r\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}d\PYGZdq{}}\PYG{p}{]));}
+\end{Verbatim}

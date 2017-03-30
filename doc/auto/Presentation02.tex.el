@@ -1,8 +1,8 @@
 (TeX-add-style-hook
- "Presentation02"
+ "Presentation02.tex"
  (lambda ()
    (TeX-add-to-alist 'LaTeX-provided-class-options
-                     '(("beamer" "presentation")))
+                     '(("article" "11pt") ("beamer" "presentation")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem")))
    (add-to-list 'LaTeX-verbatim-environments-local "semiverbatim")
@@ -19,9 +19,8 @@
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "lstinline")
    (TeX-run-style-hooks
     "latex2e"
-    "{highlight"
-    "beamer"
-    "beamer10"
+    "article"
+    "art11"
     "inputenc"
     "fontenc"
     "fixltx2e"
@@ -37,6 +36,8 @@
     "wasysym"
     "amssymb"
     "hyperref"
+    "beamer"
+    "beamer10"
     "xeCJK"
     "minted")
    (LaTeX-add-xcolor-definecolors
