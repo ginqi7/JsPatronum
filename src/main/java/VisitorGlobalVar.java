@@ -95,8 +95,6 @@ public class VisitorGlobalVar implements NodeVisitor {
             keywordLiteral.setType(Token.THIS);
             propertyGet.setTarget(keywordLiteral);
             propertyGet.setProperty(name);
-            System.out.println(propertyGet.toSource());
-            System.out.println(functionNode.toSource());
             functionNode.setFunctionName(null);
             assignment.setLeft(propertyGet);
             assignment.setRight(functionNode);

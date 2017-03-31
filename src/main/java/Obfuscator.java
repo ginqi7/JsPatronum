@@ -85,7 +85,7 @@ public class Obfuscator {
 	 * 对外接口，执行混淆操作
 	 */
     public void obfuscate() {
-        this.printAst(); 
+        // this.printAst(); 
         this.Test();
     }
 
