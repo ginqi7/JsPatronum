@@ -72,7 +72,7 @@ public class Obfuscator {
         this.astRoot.visit(visitorTopFunction);
         VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
         this.astRoot.visit(visitorStringToArray);
-        freshAST();
+        this.freshAST();
         this.astRoot.visit(visitorSetScope);
         VisitorLocalVar visitorLocalVar = new VisitorLocalVar();
         this.astRoot.visit(visitorLocalVar);
@@ -85,7 +85,7 @@ public class Obfuscator {
 	 * 对外接口，执行混淆操作
 	 */
     public void obfuscate() {
-        this.printAst(); 
+        // this.printAst(); 
         this.Test();
     }
 

@@ -48,9 +48,9 @@ public class VisitorPropertyToElement implements NodeVisitor {
         if (functionCall.getTarget() == propertyGet) {
             functionCall.setTarget(elementGet);
         } else {
-            List<AstNode> arguments = new ArrayList<AstNode>();
-            arguments.add(elementGet);
-            functionCall.setArguments(arguments);
+            List<AstNode> arguments = functionCall.getArguments();
+            arguments.set(arguments.lastIndexOf(propertyGet), elementGet);
+            elementGet.setParent(functionCall);
         }
 
     }
@@ -58,9 +58,9 @@ public class VisitorPropertyToElement implements NodeVisitor {
     private void propertyToElement(PropertyGet propertyGet) {
         AstNode parentNode = propertyGet.getParent();
         if (parentNode instanceof InfixExpression) {
-			this.infixToElement((InfixExpression) parentNode, propertyGet);
+            this.infixToElement((InfixExpression) parentNode, propertyGet);
         } else if (parentNode.getClass() == ElementGet.class) {
-			this.elementGetToElement((ElementGet) parentNode, propertyGet);
+            this.elementGetToElement((ElementGet) parentNode, propertyGet);
         } else if (parentNode.getClass() == FunctionCall.class) {
             this.functionCallToElement((FunctionCall) parentNode, propertyGet);
         }

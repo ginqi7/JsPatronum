@@ -41,6 +41,10 @@ public class VisitorSetScope implements NodeVisitor {
         Scope scope = null;
         AstNode parentNode = name.getParent();
         while (scope == null) {
+            if (parentNode == null) {
+                System.out.println(name.toSource());
+            }
+
             if (parentNode.getClass() == AstRoot.class) {
                 scope = (Scope) parentNode;
             }
