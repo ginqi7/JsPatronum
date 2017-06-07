@@ -70,14 +70,14 @@ public class Obfuscator {
         this.astRoot.visit(visitorLiteralToVar);
         VisitorTopFunction visitorTopFunction = new VisitorTopFunction(visitorLiteralToVar.getParams(), visitorLiteralToVar.getArguments());
         this.astRoot.visit(visitorTopFunction);
-        VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
-        this.astRoot.visit(visitorStringToArray);
-        this.freshAST();
-        this.astRoot.visit(visitorSetScope);
-        VisitorLocalVar visitorLocalVar = new VisitorLocalVar();
-        this.astRoot.visit(visitorLocalVar);
-        VisitorConstant visitorConstant = new VisitorConstant();
-        this.astRoot.visit(visitorConstant);
+        // VisitorStringToArray visitorStringToArray = new VisitorStringToArray();
+        // this.astRoot.visit(visitorStringToArray);
+        // this.freshAST();
+        // this.astRoot.visit(visitorSetScope);
+        // VisitorLocalVar visitorLocalVar = new VisitorLocalVar();
+        // this.astRoot.visit(visitorLocalVar);
+        // VisitorConstant visitorConstant = new VisitorConstant();
+        // this.astRoot.visit(visitorConstant);
     }
 
 	/**
@@ -85,8 +85,8 @@ public class Obfuscator {
 	 * 对外接口，执行混淆操作
 	 */
     public void obfuscate() {
-        // this.printAst(); 
-        this.Test();
+         this.printAst(); 
+         this.Test();
     }
 
 	/**
@@ -98,10 +98,10 @@ public class Obfuscator {
 	 * @throws IOException
 	 */
     public void compress(Writer out) throws IOException {
-        String source = this.astRoot.toSource();
-        String string = this.removeBlankCharacter(source); 
-        out.write(new StringHack().escapedCharacters(string));
-        // out.write(new StringHack().escapedCharacters(this.astRoot.toSource()));
+        String source = this.astRoot.toSource(); 
+        // String string = this.removeBlankCharacter(source); 
+        // out.write(new StringHack().escapedCharacters(source));
+        out.write(source);
     }
     
     String removeBlankCharacter(String source) {

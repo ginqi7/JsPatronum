@@ -34,13 +34,19 @@ public class VisitorLocalVar implements NodeVisitor {
 		return true;
 	}
 
-	private void randomRename(Name name) {
+    private boolean isLegalVariableName(String name) {
+        if (Build_in.keepKeywords.contains(name)) {
+            return false;
+        }
+        return true;
+    }
+    private void randomRename(Name name) {
         Scope scope = name.getScope();
         if (this.scopeNamesMap.containsKey(scope)) {
             Map<String, String> nameMap = this.scopeNamesMap.get(scope);
             if (!nameMap.containsKey(name.getIdentifier())) {
                 String newName = Tool.getRandomName(Tool.lengthOfVar(this.number));
-                while (names.contains(newName)) {
+                while (!isLegalVariableName(newName) || names.contains(newName)) {
                     newName = Tool.getRandomName(Tool.lengthOfVar(this.number));
                 }
                 names.add(newName);

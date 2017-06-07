@@ -1,6 +1,5 @@
 package main.java;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mozilla.javascript.Token;
@@ -16,6 +15,7 @@ import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.PropertyGet;
+import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
 
@@ -27,7 +27,8 @@ import org.mozilla.javascript.ast.VariableInitializer;
 public class VisitorGlobalVar implements NodeVisitor {
 
     private boolean isGlobalVar(Name name) {
-        if (name.getScope().getClass() == AstRoot.class) {
+        Scope defineScope = name.getDefiningScope();
+        if (defineScope != null && defineScope.getClass() == AstRoot.class) {
             return true;
         }
         return false;
@@ -35,11 +36,18 @@ public class VisitorGlobalVar implements NodeVisitor {
 
     private PropertyGet createPropertyGet(Name name) {
         PropertyGet propertyGet = new PropertyGet();
-        KeywordLiteral keywordLiteral = new KeywordLiteral();
-        keywordLiteral.setType(Token.THIS);
-        propertyGet.setTarget(keywordLiteral);
+        // KeywordLiteral keywordLiteral = new KeywordLiteral();
+        // keywordLiteral.setType(Token.THIS);
+        // propertyGet.setTarget(keywordLiteral);
+        // propertyGet.setProperty(name);
+        // return propertyGet;
+
+        Name window = new Name();
+        window.setIdentifier("window");
+        propertyGet.setTarget(window);
         propertyGet.setProperty(name);
         return propertyGet;
+
     }
 
     private void varDeclarToProperty(VariableInitializer variableInitializer, Name name) {
@@ -52,6 +60,7 @@ public class VisitorGlobalVar implements NodeVisitor {
         assignment.setRight(variableInitializer.getInitializer());
         assignment.setOperator(Token.ASSIGN);
         expressionStatement.setExpression(assignment);
+        System.out.println(variableDeclaration.toSource());
         parentNode.replaceChild(variableDeclaration, expressionStatement);
     }
 

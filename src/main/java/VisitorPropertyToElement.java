@@ -39,8 +39,11 @@ public class VisitorPropertyToElement implements NodeVisitor {
 
     private void elementGetToElement(ElementGet parentNode, PropertyGet propertyGet) {
         ElementGet elementGet = this.createElementGet(propertyGet);
-        parentNode.setTarget(elementGet);
-        
+        if (parentNode.getTarget() == propertyGet) {
+            parentNode.setTarget(elementGet);
+        } else {
+            parentNode.setElement(elementGet);
+        }
     }
 
     private void functionCallToElement(FunctionCall functionCall, PropertyGet propertyGet) {

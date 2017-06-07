@@ -10,7 +10,7 @@ public class VisitorConstant implements NodeVisitor{
 	@Override
 	public boolean visit(AstNode astNode) {
         if (astNode.getClass() == NumberLiteral.class) {
-			this.recodeNumber((NumberLiteral) astNode);
+            this.recodeNumber((NumberLiteral) astNode);
 		} else if (astNode.getClass() == StringLiteral.class) {
             this.recodeString((StringLiteral) astNode);
 		}
@@ -31,10 +31,21 @@ public class VisitorConstant implements NodeVisitor{
         return codeString;
 	}
 
-	private void recodeNumber(NumberLiteral numberLiteral) {
+    private boolean isIntStr(String numStr) {
+        for (int i = 0; i < numStr.length(); i++) {
+            if (numStr.charAt(i) == '.') {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void recodeNumber(NumberLiteral numberLiteral) {
         try {
-            int number = Integer.parseInt(numberLiteral.getValue());
-            numberLiteral.setValue("0x" + Integer.toHexString(number));
+            String numStr = numberLiteral.getValue();
+            if (isIntStr(numStr)) {
+                int number = Integer.parseInt(numberLiteral.getValue());
+                numberLiteral.setValue("0x" + Integer.toHexString(number));
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

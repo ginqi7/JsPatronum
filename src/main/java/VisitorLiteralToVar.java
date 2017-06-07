@@ -100,14 +100,21 @@ public class VisitorLiteralToVar implements NodeVisitor {
         }
         return false;
     }
-        
+    private boolean isWindowName(AstNode astNode) {
+        if (astNode.getClass() == Name.class &&
+            ((Name) astNode).getIdentifier().equals("window")) {
+            return true;
+        }
+        return false;
+    }
+    
     @Override
     public boolean visit(AstNode astNode) {
         if (astNode.getClass() == StringLiteral.class) {
             StringLiteral stringLiteral = (StringLiteral) astNode;
             stringLiteral.setQuoteCharacter('\"');
         }
-        if (astNode.getClass() == StringLiteral.class || isThisKeyword(astNode)) {
+        if (astNode.getClass() == StringLiteral.class || isWindowName(astNode)) {
             this.literalToVar(astNode);
         }
         return true;
