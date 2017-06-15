@@ -41,10 +41,10 @@ public class VisitorSetScope implements NodeVisitor {
         Scope scope = null;
         AstNode parentNode = name.getParent();
         while (scope == null) {
-            if (parentNode.getClass() == AstRoot.class) {
-                scope = (Scope) parentNode;
+            if (parentNode == null) {
+                return null;
             }
-            else if (parentNode instanceof ScriptNode){
+            if (parentNode instanceof ScriptNode){
                 ScriptNode scriptNode = (ScriptNode)parentNode;
                 List<Symbol> symbols = scriptNode.getSymbols();
                 if (symbolsHasName(symbols, name)) {

@@ -15,6 +15,7 @@ public class StringHack {
 	 * @return
 	 */
     public String escapedCharacters(String string) {
-        return string.replace("\\u", "u");
+        //        return string.replace("\\u", "u");
+        return string.replaceAll("\\\\(u([0-9]|[a-f]){4})", "$1");
     }
 }

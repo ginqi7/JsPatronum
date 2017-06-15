@@ -1,6 +1,5 @@
 package main.java;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mozilla.javascript.Token;
@@ -16,6 +15,7 @@ import org.mozilla.javascript.ast.KeywordLiteral;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.PropertyGet;
+import org.mozilla.javascript.ast.Scope;
 import org.mozilla.javascript.ast.VariableDeclaration;
 import org.mozilla.javascript.ast.VariableInitializer;
 
@@ -27,7 +27,8 @@ import org.mozilla.javascript.ast.VariableInitializer;
 public class VisitorGlobalVar implements NodeVisitor {
 
     private boolean isGlobalVar(Name name) {
-        if (name.getScope().getClass() == AstRoot.class) {
+        Scope defineScope = name.getDefiningScope();
+        if (defineScope != null && defineScope.getClass() == AstRoot.class) {
             return true;
         }
         return false;
@@ -35,11 +36,19 @@ public class VisitorGlobalVar implements NodeVisitor {
 
     private PropertyGet createPropertyGet(Name name) {
         PropertyGet propertyGet = new PropertyGet();
-        KeywordLiteral keywordLiteral = new KeywordLiteral();
-        keywordLiteral.setType(Token.THIS);
-        propertyGet.setTarget(keywordLiteral);
+        // KeywordLiteral keywordLiteral = new KeywordLiteral();
+        // keywordLiteral.setType(Token.THIS);
+        // propertyGet.setTarget(keywordLiteral);
+        // propertyGet.setProperty(name);
+        // return propertyGet;
+
+        Name window = new Name();
+        window.setScope(new AstRoot());
+        window.setIdentifier("window");
+        propertyGet.setTarget(window);
         propertyGet.setProperty(name);
         return propertyGet;
+
     }
 
     private void varDeclarToProperty(VariableInitializer variableInitializer, Name name) {
@@ -72,16 +81,16 @@ public class VisitorGlobalVar implements NodeVisitor {
     private void globalToProperty(Name name) {
         AstNode parentNode = name.getParent();
         if (parentNode.getClass() == VariableInitializer.class) {
-			this.varDeclarToProperty((VariableInitializer) parentNode, name);
+            this.varDeclarToProperty((VariableInitializer) parentNode, name);
         } else if (parentNode instanceof InfixExpression) {
             this.infixExpressionToProperty((InfixExpression) parentNode, name);
         } else if (parentNode.getClass() == ElementGet.class) {
-			this.elementGetToProperty((ElementGet) parentNode, name);
+            this.elementGetToProperty((ElementGet) parentNode, name);
         } else if (parentNode.getClass() == FunctionCall.class) {
-			this.functionCallToProperty((FunctionCall) parentNode, name);
-		} else if (parentNode.getClass() == FunctionNode.class) {
-			this.functionNodeToProperty((FunctionNode) parentNode, name);
-		}
+            this.functionCallToProperty((FunctionCall) parentNode, name);
+        } else if (parentNode.getClass() == FunctionNode.class) {
+            this.functionNodeToProperty((FunctionNode) parentNode, name);
+        }
 	}
 
 	private void functionNodeToProperty(FunctionNode functionNode, Name name) {
@@ -106,24 +115,24 @@ public class VisitorGlobalVar implements NodeVisitor {
     }
 
     private void functionCallToProperty(FunctionCall functionCall, Name name) {
-        List<AstNode> arguments = new ArrayList<AstNode>();
         PropertyGet propertyGet = this.createPropertyGet(name);
         if (functionCall.getTarget() == name) {
             functionCall.setTarget(propertyGet);
         } else {
-            arguments.add(propertyGet);
-            functionCall.setArguments(arguments);
+            List<AstNode> arguments = functionCall.getArguments();
+            arguments.set(arguments.lastIndexOf(name), propertyGet);
+            propertyGet.setParent(functionCall);
         }
     }
 
-        @Override
-            public boolean visit(AstNode astNode) {
-            if (astNode.getClass() == Name.class) {
-                Name name = (Name)astNode;
-                if (isGlobalVar(name)) {
-                    globalToProperty(name);
-                }
+    @Override
+    public boolean visit(AstNode astNode) {
+        if (astNode.getClass() == Name.class) {
+            Name name = (Name)astNode;
+            if (isGlobalVar(name)) {
+                globalToProperty(name);
             }
-            return true;
         }
+        return true;
+    }
 }

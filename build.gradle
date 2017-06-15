@@ -10,5 +10,6 @@ dependencies {
 }
 
 run {
-    args Eval.me("['-o', '.js:-new.js', 'hello.js']")
+    //args Eval.me("['-o', '.js:-new.js', 'hello.js']")
+    args Eval.me("['-h']")
 }

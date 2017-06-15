@@ -46,12 +46,16 @@ public class Build_in {
         notNameSymbol.add('-');
         notNameSymbol.add('*');
         notNameSymbol.add('/');
+        notNameSymbol.add('?');
         notNameSymbol.add(',');
+        notNameSymbol.add(':');
         notNameSymbol.add(';');
         notNameSymbol.add('=');
         notNameSymbol.add('>');
         notNameSymbol.add('<');
         notNameSymbol.add('!');
+        notNameSymbol.add('(');
+        notNameSymbol.add(')');
         notNameSymbol.add('{');
         notNameSymbol.add('}');
         notNameSymbol.add('&');
@@ -108,6 +112,7 @@ public class Build_in {
         keepKeywords.add("switch");
         keepKeywords.add("synchronized");
         keepKeywords.add("this");
+        keepKeywords.add("is");
         keepKeywords.add("throw");
         keepKeywords.add("throws");
         keepKeywords.add("transient");
