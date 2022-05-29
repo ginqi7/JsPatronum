@@ -1,5 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k+kd}{var} \PYG{n+nx}{hello} \PYG{o}{=} \PYG{k+kd}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}
-\PYG{c+c1}{// do someting}
-\PYG{p}{\PYGZcb{}}
-\end{Verbatim}

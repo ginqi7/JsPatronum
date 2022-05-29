@@ -1,5 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
- \PYG{k+kd}{var} \PYG{n+nx}{sum} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{;}
- \PYG{n+nx}{console}\PYG{p}{.}\PYG{n+nx}{log}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
- \PYG{n+nx}{console}\PYG{p}{.}\PYG{n+nx}{log}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{);}
-\end{Verbatim}

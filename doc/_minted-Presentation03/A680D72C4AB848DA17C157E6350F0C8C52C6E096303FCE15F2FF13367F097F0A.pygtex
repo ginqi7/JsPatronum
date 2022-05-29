@@ -1,3 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{this}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}hello\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{k}{this}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}console\PYGZdq{}}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}log\PYGZdq{}}\PYG{p}{](}\PYG{l+s+s2}{\PYGZdq{}hello world\PYGZdq{}}\PYG{p}{);}
-\end{Verbatim}
