@@ -1,6 +1,7 @@
 package main.java;
 
-import jargs.gnu.CmdLineParser;
+import com.sanityinc.jargs.CmdLineParser;
+// import jargs.gnu.CmdLineParser;
 
 import java.io.*;
 
@@ -36,19 +37,19 @@ public class JsPatronum {
 
             Boolean version = (Boolean) parser.getOptionValue(versionOpt);
             if (version != null && version.booleanValue()) {
-				nowVersion();
-				System.exit(0);
-			}
+		nowVersion();
+		System.exit(0);
+	    }
 
-			Boolean compress = (Boolean) parser.getOptionValue(compressOpt);
-			Boolean disableConsole = (Boolean) parser.getOptionValue(disableConsoleOpt);
+	    Boolean compress = (Boolean) parser.getOptionValue(compressOpt);
+	    Boolean disableConsole = (Boolean) parser.getOptionValue(disableConsoleOpt);
             String hostName = (String)parser.getOptionValue(bindHostNameOpt);
-            System.out.println(hostName);
             // 输入
             String[] fileArgs = parser.getRemainingArgs();
             java.util.List<String> files = java.util.Arrays.asList(fileArgs);
             // 如果命令行没有文件输入，则从终端读取
             if (files.isEmpty()) {
+		System.out.print("Please input file names: ");
                 files = new java.util.ArrayList<String>();
                 files.add("-");
             }
@@ -82,31 +83,31 @@ public class JsPatronum {
 
                 final String localFilename = inputFilename;
                 Obfuscator obfuscator = new Obfuscator(in, compress, disableConsole, hostName,new ErrorReporter() {
-                        public void warning(String message, String sourceName, int line, String lineSource,
-                                            int lineOffset) {
-                            System.err.println("\n[WARNING] in " + localFilename);
-                            if (line < 0) {
-                                System.err.println("  " + message);
-                            } else {
-                                System.err.println("  " + line + ':' + lineOffset + ':' + message);
-                            }
+                    public void warning(String message, String sourceName, int line, String lineSource,
+                        int lineOffset) {
+                        System.err.println("\n[WARNING] in " + localFilename);
+                        if (line < 0) {
+                            System.err.println("  " + message);
+                        } else {
+                            System.err.println("  " + line + ':' + lineOffset + ':' + message);
                         }
+                    }
 
-                        public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
-                            System.err.println("[ERROR] in " + localFilename);
-                            if (line < 0) {
-                                System.err.println("  " + message);
-                            } else {
-                                System.err.println("  " + line + ':' + lineOffset + ':' + message);
-                            }
+                    public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
+                        System.err.println("[ERROR] in " + localFilename);
+                        if (line < 0) {
+                            System.err.println("  " + message);
+                        } else {
+                            System.err.println("  " + line + ':' + lineOffset + ':' + message);
                         }
+                    }
 
-                        public EvaluatorException runtimeError(String message, String sourceName, int line,
-                                                               String lineSource, int lineOffset) {
-                            error(message, sourceName, line, lineSource, lineOffset);
-                            return new EvaluatorException(message);
-                        }
-                    });
+                    public EvaluatorException runtimeError(String message, String sourceName, int line,
+                        String lineSource, int lineOffset) {
+                        error(message, sourceName, line, lineSource, lineOffset);
+                        return new EvaluatorException(message);
+                    }
+                });
 
                 // 关闭输入流，打开输出流，防止输入文件被覆盖
                 in.close();
@@ -120,41 +121,38 @@ public class JsPatronum {
                 obfuscator.obfuscate();
                 obfuscator.compress(out);
             }
-
-		} catch (CmdLineParser.IllegalOptionValueException e) {
-			e.printStackTrace();
-		} catch (CmdLineParser.UnknownOptionException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	}catch (CmdLineParser.OptionException e) {
+	    e.printStackTrace();
+	} catch (FileNotFoundException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	} finally {
+	    if (in != null) {
+		try {
+		    in.close();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+		    e.printStackTrace();
 		}
-	}
+	    }
 
-	private static void nowVersion() {
+	    if (out != null) {
+		try {
+		    out.close();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	    }
+	}
+    }
+
+    private static void nowVersion() {
         System.out.println("JsPatronum Version: 3.14");
     }
 
-	/*
-	 * 打印帮助信息
-	 */
+    /*
+     * 打印帮助信息
+     */
     private static void usage() {
         System.err.println(
             "\nJsPatronum Version: 3.14\n"
