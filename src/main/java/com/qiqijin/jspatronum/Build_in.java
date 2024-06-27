@@ -1,4 +1,4 @@
-package main.java;
+package com.qiqijin.jspatronum;
 
 import java.util.HashSet;
 import java.util.Set;

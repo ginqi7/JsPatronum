@@ -38,6 +38,12 @@
     </dependencies>
     
     <build>
+	<sourceDirectory>src/main/java</sourceDirectory>
+	<resources>
+	    <resource>
+		<directory>src/main/resources</directory>
+	    </resource>
+	</resources>
 	<plugins>
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -46,7 +52,7 @@
 		<configuration>
 		    <archive>
 			<manifest>
-			    <mainClass>main.java.JsPatronum</mainClass>
+			    <mainClass>com.qiqijin.jspatronum.Main</mainClass>
 			</manifest>
 		    </archive>
 		    <descriptorRefs>

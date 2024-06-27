@@ -1,4 +1,4 @@
-package main.java;
+package com.qiqijin.jspatronum;
 
 import java.util.ArrayList;
 import java.util.Arrays;

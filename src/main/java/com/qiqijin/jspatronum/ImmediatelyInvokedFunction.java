@@ -1,4 +1,4 @@
-package main.java;
+package com.qiqijin.jspatronum;
 import java.util.List;
 
 import org.mozilla.javascript.Parser;

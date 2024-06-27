@@ -1,4 +1,4 @@
-package main.java;
+package com.qiqijin.jspatronum;
 
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
